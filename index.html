@@ -1213,7 +1213,7 @@ cursor: default;
        </div>
       <div><label data-template-id="attending-label" class="canva-text mb-2 block font-semibold" for="attending" style="color: rgb(40, 53, 45); font-weight: 600; font-style: normal; font-size: 16px;">是否出席？</label> <select id="attending" name="attending" required="" class="w-full rounded-sm bg-white px-4 py-3"> <option value="" disabled="" selected="">請選擇</option> <option value="欣然接受出席">欣然接受出席</option> <option value="不克出席">不克出席</option> </select>
        </div>
-       <div><label data-template-id="guest-count-label" class="canva-text mb-2 block font-semibold" for="guest-count" style="color: rgb(40, 53, 45); font-weight: 600; font-style: normal; font-size: 16px;">出席人數</label> <input id="guest-count" name="guest_count" required="" min="1" max="20" value="1" type="number" class="w-full rounded-sm bg-white px-4 py-3">
+      <div id="guest-count-field"><label data-template-id="guest-count-label" class="canva-text mb-2 block font-semibold" for="guest-count" style="color: rgb(40, 53, 45); font-weight: 600; font-style: normal; font-size: 16px;">出席人數</label> <input id="guest-count" name="guest_count" required="" min="1" max="20" value="1" type="number" class="w-full rounded-sm bg-white px-4 py-3">
        </div>
        <div class="sm:col-span-2"><label data-template-id="dietary-label" class="canva-text mb-2 block font-semibold" for="dietary-notes" style="color: rgb(40, 53, 45); font-weight: 600; font-style: normal; font-size: 16px;">飲食需求或備註</label> <textarea id="dietary-notes" name="dietary_notes" rows="3" class="w-full resize-none rounded-sm bg-white px-4 py-3"></textarea>
        </div>
@@ -1229,7 +1229,7 @@ cursor: default;
          <dd id="summary-phone">-</dd>
          <dt class="font-semibold">出席</dt>
          <dd id="summary-attending">-</dd>
-         <dt class="font-semibold">人數</dt>
+         <dt id="summary-count-label" class="font-semibold">人數</dt>
          <dd id="summary-count">-</dd>
          <dt class="font-semibold">備註</dt>
          <dd id="summary-notes">-</dd>
@@ -1514,9 +1514,13 @@ cursor: default;
     const summaryName = document.getElementById("summary-name");
     const summaryPhone = document.getElementById("summary-phone");
     const summaryAttending = document.getElementById("summary-attending");
+    const summaryCountLabel = document.getElementById("summary-count-label");
     const summaryCount = document.getElementById("summary-count");
     const summaryNotes = document.getElementById("summary-notes");
     const formFields = form.querySelector("div.grid");
+    const attendingField = document.getElementById("attending");
+    const guestCountField = document.getElementById("guest-count-field");
+    const guestCountInput = document.getElementById("guest-count");
 
     // Fill these values from your Google Form prefilled link.
     const GOOGLE_FORM_CONFIG = {
@@ -1536,22 +1540,42 @@ cursor: default;
     }
 
     function getReplySummaryData() {
+      const attendingValue = attendingField.value;
+      const isAttending = attendingValue === "欣然接受出席";
+
       return {
         name: document.getElementById("guest-name").value.trim(),
         phone: document.getElementById("phone").value.trim(),
-        attending: document.getElementById("attending").value,
-        count: String(Number(document.getElementById("guest-count").value)),
+        attending: attendingValue,
+        count: isAttending ? String(Number(guestCountInput.value)) : "-",
         notes: document.getElementById("dietary-notes").value.trim() || "無"
       };
     }
 
+    function toggleGuestCountVisibility() {
+      const isAttending = attendingField.value === "欣然接受出席";
+
+      guestCountField.classList.toggle("hidden", !isAttending);
+      guestCountInput.required = isAttending;
+
+      if (!isAttending) {
+        guestCountInput.value = "1";
+      }
+    }
+
     function showReplySummary(summary) {
-      summaryThanks.textContent = `${summary.name}，感謝您的回覆，我們婚禮當天見。`;
+      const isAttending = summary.attending === "欣然接受出席";
+
+      summaryThanks.textContent = isAttending
+        ? `${summary.name}，感謝您的回覆，我們婚禮當天見。`
+        : `${summary.name}，感謝您的回覆與祝福。`;
       summaryName.textContent = summary.name || "-";
       summaryPhone.textContent = summary.phone || "-";
       summaryAttending.textContent = summary.attending || "-";
       summaryCount.textContent = summary.count || "-";
       summaryNotes.textContent = summary.notes || "無";
+      summaryCountLabel.classList.toggle("hidden", !isAttending);
+      summaryCount.classList.toggle("hidden", !isAttending);
       replySummary.classList.remove("hidden");
 
       if (formFields) {
@@ -1597,8 +1621,8 @@ cursor: default;
 
       payload.append(entries.guestName, document.getElementById("guest-name").value.trim());
       payload.append(entries.phone, document.getElementById("phone").value.trim());
-      payload.append(entries.attending, document.getElementById("attending").value);
-      payload.append(entries.guestCount, String(Number(document.getElementById("guest-count").value)));
+      payload.append(entries.attending, attendingField.value);
+      payload.append(entries.guestCount, attendingField.value === "欣然接受出席" ? String(Number(guestCountInput.value)) : "");
       payload.append(entries.dietaryNotes, document.getElementById("dietary-notes").value.trim() || "None");
 
       return payload;
@@ -1641,7 +1665,8 @@ cursor: default;
 
         showReplySummary(replyData);
         form.reset();
-        document.getElementById("guest-count").value = "1";
+        guestCountInput.value = "1";
+        toggleGuestCountVisibility();
         showStatus("謝謝您，您的回覆已成功送出。", "#426448");
       } catch (_error) {
         showStatus("暫時無法儲存回覆，請再試一次。", "#9f3f3b");
@@ -1653,6 +1678,8 @@ cursor: default;
     updateCountdown();
     setInterval(updateCountdown, 1000);
     startAutoplay();
+    toggleGuestCountVisibility();
+    attendingField.addEventListener("change", toggleGuestCountVisibility);
     initializeGoogleForm();
     createIconsSafely();
   </script>

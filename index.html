@@ -86,8 +86,8 @@
         0 100%,
         0 100%,
         center center;
-      opacity: .4;
-      animation: bubbleRise 22s linear infinite, bubbleFloatTwo 34s ease-in-out infinite;
+      opacity: .3;
+      animation: bubbleRise 34s linear infinite;
     }
 
     .castle-backdrop {
@@ -121,8 +121,8 @@
         radial-gradient(circle at 50% 34%, rgba(255,243,214,.38) 0 14%, rgba(255,243,214,0) 44%),
         radial-gradient(circle at 50% 77%, rgba(255,228,188,.26) 0 12%, rgba(255,228,188,0) 48%);
       mix-blend-mode: screen;
-      opacity: .16;
-      animation: castleGlow 9s ease-in-out infinite alternate;
+      opacity: .12;
+      animation: none;
     }
 
     body > :not(.bubble-layer):not(.castle-backdrop):not(.photo-modal-portal) {
@@ -137,13 +137,48 @@
       pointer-events: none;
       z-index: 1;
       mix-blend-mode: screen;
+      opacity: .78;
       filter: saturate(1.06) brightness(1.04);
     }
 
     .bubble-layer-soft {
-      opacity: .58;
+      opacity: .48;
       mix-blend-mode: soft-light;
       filter: blur(.6px) saturate(.96);
+    }
+
+    @media (min-width: 641px) {
+      .bubble-layer-soft {
+        display: block;
+        opacity: .46;
+        mix-blend-mode: screen;
+        filter: blur(.4px) saturate(1);
+      }
+
+      .bubble-layer {
+        opacity: .96;
+      }
+
+      .bubble-layer span:nth-child(n+13) {
+        display: none;
+      }
+
+      .bubble-layer-soft span:nth-child(n+9) {
+        display: none;
+      }
+
+      .bubble-layer span::before {
+        animation: sparkleSheen 6s ease-in-out infinite alternate;
+        opacity: .94;
+      }
+
+      .bubble-layer span {
+        border-color: rgba(188, 224, 255, .86);
+        box-shadow:
+          inset 0 0 0 1px rgba(255,255,255,.66),
+          inset 0 0 24px rgba(196,224,255,.26),
+          0 0 16px rgba(176,214,255,.34);
+      }
     }
 
     .bubble-layer-soft span {
@@ -360,6 +395,49 @@
       }
     }
 
+    @media (max-width: 640px) {
+      body::before,
+      body::after {
+        animation: none;
+        opacity: .12;
+      }
+
+      .bubble-layer {
+        display: block;
+        opacity: .4;
+        mix-blend-mode: screen;
+        filter: saturate(.92) brightness(1.02);
+      }
+
+      .bubble-layer-soft {
+        display: block;
+        opacity: .24;
+        mix-blend-mode: screen;
+        filter: blur(.6px) saturate(.86);
+      }
+
+      .bubble-layer span:nth-child(n+7) {
+        display: none;
+      }
+
+      .bubble-layer-soft span:nth-child(n+4) {
+        display: none;
+      }
+
+      .bubble-layer span {
+        animation-duration: 22s !important;
+      }
+
+      .bubble-layer span::before {
+        opacity: .76;
+      }
+
+      .castle-backdrop {
+        opacity: .2;
+        filter: saturate(.92) brightness(.96);
+      }
+    }
+
     .editorial-title { font-family: "Playfair Display", serif; }
 
     .rsvp-handwriting,
@@ -434,6 +512,84 @@
     .rsvp-handwriting [data-template-id="phone-label"],
     .rsvp-handwriting #summary-phone-label {
       letter-spacing: .05em !important;
+    }
+
+    @media (min-width: 641px) {
+      .rsvp-handwriting {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .rsvp-static-bubbles {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .rsvp-static-bubbles span {
+        position: absolute;
+        border-radius: 999px;
+        border: 2px solid rgba(166, 209, 245, .7);
+        background:
+          radial-gradient(circle at 30% 24%, rgba(255,255,255,.84) 0 15%, rgba(255,255,255,.26) 33%, rgba(255,255,255,0) 56%),
+          radial-gradient(circle at 50% 50%, rgba(184,221,252,.24) 0 68%, rgba(184,221,252,0) 74%);
+        box-shadow:
+          inset 0 0 0 1px rgba(255,255,255,.6),
+          0 0 18px rgba(170,214,250,.34);
+        opacity: .86;
+      }
+
+      .rsvp-static-bubbles span:nth-child(1) { left: -16px; top: 94px; width: 74px; height: 74px; }
+      .rsvp-static-bubbles span:nth-child(2) { left: 58px; top: 360px; width: 52px; height: 52px; opacity: .8; }
+      .rsvp-static-bubbles span:nth-child(3) { right: 42px; top: 120px; width: 68px; height: 68px; }
+      .rsvp-static-bubbles span:nth-child(4) { right: -12px; top: 430px; width: 90px; height: 90px; opacity: .9; }
+      .rsvp-static-bubbles span:nth-child(5) { right: 88px; bottom: 84px; width: 58px; height: 58px; opacity: .78; }
+
+      .rsvp-handwriting > :not(.rsvp-static-bubbles) {
+        position: relative;
+        z-index: 2;
+      }
+
+      .rsvp-handwriting::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        opacity: .94;
+        background:
+          radial-gradient(circle at 7% 22%, rgba(255,255,255,0) 0 18px, rgba(169,211,248,.58) 19px 21px, rgba(255,255,255,.74) 22px 24px, rgba(255,255,255,0) 25px),
+          radial-gradient(circle at 15% 56%, rgba(255,255,255,0) 0 13px, rgba(177,217,252,.54) 14px 16px, rgba(255,255,255,.68) 17px 19px, rgba(255,255,255,0) 20px),
+          radial-gradient(circle at 24% 84%, rgba(255,255,255,0) 0 10px, rgba(183,220,252,.5) 11px 13px, rgba(255,255,255,.62) 14px 15px, rgba(255,255,255,0) 16px),
+          radial-gradient(circle at 76% 24%, rgba(255,255,255,0) 0 16px, rgba(164,207,247,.58) 17px 20px, rgba(255,255,255,.72) 21px 23px, rgba(255,255,255,0) 24px),
+          radial-gradient(circle at 86% 52%, rgba(255,255,255,0) 0 14px, rgba(173,214,250,.56) 15px 17px, rgba(255,255,255,.7) 18px 20px, rgba(255,255,255,0) 21px),
+          radial-gradient(circle at 94% 79%, rgba(255,255,255,0) 0 9px, rgba(181,219,252,.5) 10px 12px, rgba(255,255,255,.62) 13px 14px, rgba(255,255,255,0) 15px);
+      }
+
+      .rsvp-handwriting::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        opacity: .42;
+        background:
+          radial-gradient(circle at 7% 22%, rgba(255,255,255,.5) 0 8px, rgba(255,255,255,0) 10px),
+          radial-gradient(circle at 76% 24%, rgba(255,255,255,.48) 0 7px, rgba(255,255,255,0) 9px),
+          radial-gradient(circle at 86% 52%, rgba(255,255,255,.44) 0 6px, rgba(255,255,255,0) 8px);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .rsvp-static-bubbles {
+        display: block;
+        opacity: .5;
+      }
+
+      .rsvp-static-bubbles span:nth-child(n+4) {
+        display: none;
+      }
     }
     .hero-image-wrap::after {
       content: "";
@@ -872,14 +1028,12 @@ cursor: default;
   <div class="bubble-layer bubble-layer-soft" aria-hidden="true">
    <span></span><span></span><span></span><span></span><span></span>
    <span></span><span></span><span></span><span></span><span></span>
-   <span></span><span></span><span></span><span></span><span></span>
-   <span></span>
+    <span></span><span></span>
   </div>
   <div class="bubble-layer" aria-hidden="true">
    <span></span><span></span><span></span><span></span><span></span>
    <span></span><span></span><span></span><span></span><span></span>
-   <span></span><span></span><span></span><span></span><span></span>
-   <span></span>
+    <span></span><span></span>
   </div>
   <header class="w-full px-5 pt-5 md:px-10 md:pt-8">
    <nav aria-label="婚禮頁面導覽" class="mx-auto flex max-w-6xl items-center justify-between border-b border-[#d9d2c4] pb-4"><span class="editorial-title text-lg italic text-[#66715a]">D + N</span> <span data-template-id="nav-date" class="canva-text text-xs font-medium uppercase tracking-[.18em]" style="color: rgb(102, 113, 90); font-weight: 600; font-style: normal; font-size: 16px;">2026 · 10 · 11</span>
@@ -895,7 +1049,7 @@ cursor: default;
       <p data-template-id="hero-date" class="canva-text mb-2 font-semibold uppercase tracking-[.15em]" style="color: rgb(102, 113, 90); font-weight: 400; font-style: normal; font-size: 20px;"><span>鄧福順＆劉思吟</span><br><span>2026 年 10 月 11 日・星期日</span></p>
       <p data-template-id="hero-location" class="canva-text" style="color: rgb(76, 85, 77); font-weight: 400; font-style: normal; font-size: 20px;">邀您共度一日，分享這份喜悅，和見證我們的愛情。</p>
      </div>
-    <div class="reveal hero-image-wrap relative self-start overflow-hidden rounded-sm bg-[#ded8cb] shadow-[0_18px_50px_rgba(45,55,43,.18)]"><img data-template-id="hero-image" loading="lazy" class="canva-image block h-auto w-full cursor-zoom-in object-contain" src="pics/三生三世.png" alt="三生三世.png">
+    <div class="reveal hero-image-wrap relative self-start overflow-hidden rounded-sm bg-[#ded8cb] shadow-[0_18px_50px_rgba(45,55,43,.18)]"><img data-template-id="hero-image" loading="eager" fetchpriority="high" decoding="async" class="canva-image block h-auto w-full cursor-zoom-in object-contain" src="pics/三生三世.png" alt="三生三世.png">
       <div class="absolute bottom-0 left-0 z-10 p-7 text-white md:p-10">
        <p data-template-id="hero-image-caption" class="canva-text editorial-title italic" style="color: rgb(255, 255, 255); font-style: italic;"></p>
       </div>
@@ -997,6 +1151,9 @@ cursor: default;
     </div>
    </section>
   <section class="rsvp-handwriting w-full px-5 py-16 md:px-10 md:py-20">
+    <div class="rsvp-static-bubbles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
     <div class="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[.78fr_1.22fr]">
      <aside class="pt-2">
       <p data-template-id="rsvp-kicker" class="canva-text mb-4 font-semibold uppercase tracking-[.25em]" style="color: rgb(184, 111, 104); font-weight: 600; font-style: normal; font-size: 17px;">敬請回覆</p>

@@ -447,6 +447,146 @@
       background: linear-gradient(to right, transparent, #b8b29f, transparent);
     }
 
+    .hero-copy {
+      position: relative;
+      z-index: 4;
+      max-width: 44rem;
+      padding: clamp(1rem, 1.6vw, 1.8rem);
+      border-radius: 14px;
+      background: linear-gradient(140deg, rgba(248,245,238,.9), rgba(248,245,238,.72));
+      box-shadow: 0 14px 34px rgba(47, 56, 49, .12);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      border: 1px solid rgba(228, 218, 201, .72);
+    }
+
+    [data-template-id="hero-section"] .reveal {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    [data-template-id="hero-section"] .hero-image-wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    [data-template-id="hero-kicker"] {
+      color: #9b4f4b !important;
+      font-size: clamp(1rem, .56vw + .92rem, 1.28rem) !important;
+      letter-spacing: .2em !important;
+      line-height: 1.55 !important;
+      margin-bottom: 1.2rem !important;
+      text-wrap: balance;
+    }
+
+    [data-template-id="couple-names"] {
+      color: #1f2a23 !important;
+      text-shadow: 0 1px 0 rgba(255,255,255,.5);
+      font-size: clamp(3rem, 5.2vw + 1.1rem, 6.2rem) !important;
+      line-height: 1.02 !important;
+      letter-spacing: .008em !important;
+      margin-bottom: 1.35rem !important;
+      text-wrap: balance;
+    }
+
+    .hero-amp {
+      display: inline-block;
+      margin: 0 .12em;
+      font-style: italic;
+      transform: translateY(-.02em);
+    }
+
+    .hero-divider {
+      width: clamp(5.25rem, 12vw, 9.5rem);
+      margin-bottom: 1.4rem !important;
+    }
+
+    [data-template-id="hero-date"] {
+      color: #52604f !important;
+      margin-bottom: .95rem !important;
+      font-size: clamp(1.16rem, .44vw + 1.02rem, 1.42rem) !important;
+      line-height: 1.74 !important;
+      letter-spacing: .08em !important;
+      text-transform: none !important;
+      white-space: normal !important;
+      font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif !important;
+      font-weight: 500 !important;
+      text-shadow: 0 1px 0 rgba(255,255,255,.4);
+    }
+
+    [data-template-id="hero-date"] > span {
+      display: block;
+    }
+
+    [data-template-id="hero-date"] > span:first-child {
+      margin-bottom: .22rem;
+      letter-spacing: .14em;
+    }
+
+    [data-template-id="hero-date"] > span:last-child {
+      font-size: .92em;
+      letter-spacing: .12em;
+      color: #60705e;
+    }
+
+    .hero-meta-sep {
+      margin: 0 .38rem;
+      color: #7b8575;
+    }
+
+    [data-template-id="hero-location"] {
+      color: #344137 !important;
+      max-width: 30ch;
+      font-size: clamp(1.2rem, .52vw + 1rem, 1.55rem) !important;
+      line-height: 1.7 !important;
+      letter-spacing: .02em !important;
+      text-wrap: pretty;
+      font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif !important;
+      font-weight: 500 !important;
+      text-shadow: 0 1px 0 rgba(255,255,255,.36);
+    }
+
+    @media (max-width: 767px) {
+      .hero-copy {
+        max-width: 100%;
+        padding: 1rem .95rem 1.1rem;
+      }
+
+      [data-template-id="hero-location"] {
+        max-width: 100%;
+      }
+
+      [data-template-id="hero-kicker"] {
+        letter-spacing: .14em !important;
+      }
+
+      [data-template-id="couple-names"] {
+        line-height: 1.06 !important;
+      }
+
+      [data-template-id="hero-date"] {
+        letter-spacing: .045em !important;
+        line-height: 1.66 !important;
+      }
+
+      [data-template-id="hero-date"] > span:first-child {
+        letter-spacing: .08em;
+      }
+
+      [data-template-id="hero-date"] > span:last-child {
+        letter-spacing: .07em;
+      }
+
+      [data-template-id="hero-location"] {
+        max-width: 34ch;
+      }
+
+      .hero-meta-sep {
+        display: none;
+      }
+    }
+
     .reveal { animation: rise .8s ease both; }
     .reveal:nth-child(2) { animation-delay: .14s; }
     .reveal:nth-child(3) { animation-delay: .24s; }
@@ -509,7 +649,7 @@
 
     .details-section {
       position: relative;
-      background: rgba(248, 245, 238, .97);
+      background: transparent;
       isolation: isolate;
     }
 
@@ -517,7 +657,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(250, 247, 241, .82);
+      background: rgba(248, 245, 238, .65);
       z-index: 0;
       pointer-events: none;
     }
@@ -550,10 +690,76 @@
       color: #243329 !important;
     }
 
+    .details-section article[data-template-id$="-card"] {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ccbfa9;
+      border-radius: 2px;
+      background: linear-gradient(145deg, rgba(255,255,255,.97), rgba(251,247,239,.94));
+      box-shadow:
+        0 14px 30px rgba(53, 61, 52, .1),
+        inset 0 0 0 1px rgba(255,255,255,.8);
+    }
+
+    .details-section article[data-template-id$="-card"]::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(198,177,146,.58);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .details-section article[data-template-id$="-card"]::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      background:
+        radial-gradient(circle at 0 0, rgba(202,175,131,.4) 0 3px, transparent 4px),
+        radial-gradient(circle at 100% 0, rgba(202,175,131,.4) 0 3px, transparent 4px),
+        radial-gradient(circle at 0 100%, rgba(202,175,131,.4) 0 3px, transparent 4px),
+        radial-gradient(circle at 100% 100%, rgba(202,175,131,.4) 0 3px, transparent 4px);
+      background-repeat: no-repeat;
+      pointer-events: none;
+      opacity: .9;
+    }
+
     .details-section .canva-card p.canva-text {
       color: #415145 !important;
       font-weight: 500 !important;
     }
+
+    .details-section .venue-frame {
+      display: inline-block;
+      margin-top: .62rem;
+      padding: .34rem .95rem;
+      border: 1px solid #ccbba0;
+      border-radius: 999px;
+      color: #7d5f3d;
+      font-size: .92em;
+      letter-spacing: .12em;
+      background:
+        radial-gradient(circle at 12% 22%, rgba(255,255,255,.72) 0 18%, rgba(255,255,255,0) 46%),
+        linear-gradient(135deg, rgba(252,246,234,.98), rgba(244,232,209,.92));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.78),
+        0 6px 14px rgba(117,89,56,.12);
+      position: relative;
+    }
+
+    .details-section .venue-frame::before,
+    .details-section .venue-frame::after {
+      content: "✦";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #c7a982;
+      font-size: .64rem;
+      letter-spacing: 0;
+    }
+
+    .details-section .venue-frame::before { left: .42rem; }
+    .details-section .venue-frame::after { right: .42rem; }
 
     .details-section .reveal,
     .details-section .reveal:nth-child(2),
@@ -682,13 +888,11 @@ cursor: default;
   <main>
    <section data-template-id="hero-section" class="canva-section w-full px-5 py-10 md:px-10 md:py-14">
     <div class="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[.88fr_1.12fr] lg:items-stretch">
-     <div class="reveal flex flex-col justify-center py-4 lg:py-10">
+         <div class="hero-copy reveal flex flex-col justify-center py-4 lg:py-10">
       <p data-template-id="hero-kicker" class="canva-text mb-5 font-semibold uppercase tracking-[.25em]" style="color: rgb(184, 111, 104); font-weight: 600; font-style: normal; font-size: 21px;">誠摯邀請您蒞臨我們的婚禮</p>
-      <h1 data-template-id="couple-names" class="canva-text editorial-title mb-6 font-medium leading-[1.06]" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 56px; line-height: 1.06;">Denny
-&amp; Nydia</h1>
-      <div class="botanical-line mb-6 w-24"></div>
-      <p data-template-id="hero-date" class="canva-text mb-2 font-semibold uppercase tracking-[.15em]" style="color: rgb(102, 113, 90); font-weight: 400; font-style: normal; font-size: 20px;">鄧福順＆劉思吟
-2026 年 10 月 11 日・星期日</p>
+      <h1 data-template-id="couple-names" class="canva-text editorial-title mb-6 font-medium leading-[1.06]" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 56px; line-height: 1.06;">Denny <span class="hero-amp">&amp;</span> Nydia</h1>
+      <div class="hero-divider botanical-line mb-6 w-24"></div>
+      <p data-template-id="hero-date" class="canva-text mb-2 font-semibold uppercase tracking-[.15em]" style="color: rgb(102, 113, 90); font-weight: 400; font-style: normal; font-size: 20px;"><span>鄧福順＆劉思吟</span><br><span>2026 年 10 月 11 日・星期日</span></p>
       <p data-template-id="hero-location" class="canva-text" style="color: rgb(76, 85, 77); font-weight: 400; font-style: normal; font-size: 20px;">邀您共度一日，分享這份喜悅，和見證我們的愛情。</p>
      </div>
     <div class="reveal hero-image-wrap relative self-start overflow-hidden rounded-sm bg-[#ded8cb] shadow-[0_18px_50px_rgba(45,55,43,.18)]"><img data-template-id="hero-image" loading="lazy" class="canva-image block h-auto w-full cursor-zoom-in object-contain" src="pics/三生三世.png" alt="三生三世.png">
@@ -738,22 +942,16 @@ cursor: default;
      </div>
      <div class="grid gap-4 md:grid-cols-3">
       <article data-template-id="ceremony-card" class="canva-card reveal border border-[#ddd6c7] p-7 text-center"><i data-lucide="heart" class="mx-auto mb-5 h-5 w-5 text-[#b86f68]"></i>
-       <h3 data-template-id="ceremony-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">文定
-Engagement</h3>
-       <p data-template-id="ceremony-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">上午 10:00 訂婚儀式
-香榭廳</p>
+      <h3 data-template-id="ceremony-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">文定 Engagement</h3>
+      <p data-template-id="ceremony-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">上午 10:00 訂婚儀式<br><span class="venue-frame">香榭廳</span></p>
       </article>
       <article data-template-id="reception-card" class="canva-card reveal border border-[#ddd6c7] p-7 text-center"><i data-lucide="wine" class="mx-auto mb-5 h-5 w-5 text-[#b86f68]"></i>
-       <h3 data-template-id="reception-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">證婚儀式
-Ceremony</h3>
-       <p data-template-id="reception-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">上午 11:00 婚禮儀式
-星河池畔</p>
+      <h3 data-template-id="reception-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">證婚儀式 Ceremony</h3>
+      <p data-template-id="reception-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">上午 11:00 婚禮儀式<br><span class="venue-frame">星河池畔</span></p>
       </article>
       <article data-template-id="attire-card" class="canva-card reveal border border-[#ddd6c7] p-7 text-center"><i data-lucide="sparkles" class="mx-auto mb-5 h-5 w-5 text-[#b86f68]"></i>
-       <h3 data-template-id="attire-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">喜宴
-Reception</h3>
-       <p data-template-id="attire-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">中午 12:00 喜宴
-星河池畔</p>
+      <h3 data-template-id="attire-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">喜宴 Reception</h3>
+      <p data-template-id="attire-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">中午 12:00 喜宴<br><span class="venue-frame">星河池畔</span></p>
       </article>
      </div>
     </div>

@@ -1548,6 +1548,9 @@
     let dragOffsetY = 0;
     let dragStartX = 0;
     let dragStartY = 0;
+    let dragTouchStartX = 0;
+    let dragTouchStartY = 0;
+    let dragTouchActive = false;
     let dragInProgress = false;
     let lastModalTapAt = 0;
     let ignoreModalTapUntil = 0;
@@ -1691,6 +1694,9 @@
       dragOffsetY = 0;
       dragStartX = 0;
       dragStartY = 0;
+      dragTouchStartX = 0;
+      dragTouchStartY = 0;
+      dragTouchActive = false;
       dragInProgress = false;
       lastModalTapAt = 0;
       ignoreModalTapUntil = 0;
@@ -1776,6 +1782,7 @@
       modalPortal.addEventListener("touchstart", (event) => {
         const touch = event.touches[0];
         if (event.touches.length === 2) {
+          dragTouchActive = false;
           dragInProgress = false;
           modalImage.style.transition = "none";
           suppressModalClickClose = true;
@@ -1785,9 +1792,11 @@
         }
 
         if (photoModalScale > 1.04 && touch) {
-          dragInProgress = true;
+          dragTouchActive = true;
+          dragInProgress = false;
           modalImage.style.transition = "none";
-          suppressModalClickClose = true;
+          dragTouchStartX = touch.clientX;
+          dragTouchStartY = touch.clientY;
           dragStartX = touch.clientX - dragOffsetX;
           dragStartY = touch.clientY - dragOffsetY;
         }
@@ -1804,9 +1813,18 @@
           return;
         }
 
-        if (dragInProgress && event.touches.length === 1 && modalImage) {
+        if (dragTouchActive && event.touches.length === 1 && modalImage) {
           event.preventDefault();
           const touch = event.touches[0];
+          const moveX = touch.clientX - dragTouchStartX;
+          const moveY = touch.clientY - dragTouchStartY;
+          if (!dragInProgress && Math.hypot(moveX, moveY) > 8) {
+            dragInProgress = true;
+            suppressModalClickClose = true;
+          }
+          if (!dragInProgress) {
+            return;
+          }
           dragOffsetX = touch.clientX - dragStartX;
           dragOffsetY = touch.clientY - dragStartY;
           applyPhotoModalTransform();
@@ -1820,6 +1838,7 @@
         if (pinchJustEnded) {
           ignoreModalTapUntil = now + 250;
           lastModalTapAt = 0;
+          dragTouchActive = false;
           suppressModalClickClose = true;
           dragInProgress = false;
           pinchStartDistance = 0;
@@ -1830,6 +1849,7 @@
 
         const wasDragging = dragInProgress;
         const isDoubleTap = !wasDragging && event.changedTouches.length === 1 && photoModalScale > 1.02 && now - lastModalTapAt < 280;
+        dragTouchActive = false;
 
         if (isDoubleTap) {
           ignoreModalTapUntil = now + 250;
@@ -1851,6 +1871,7 @@
       }, { passive: true });
 
       modalPortal.addEventListener("touchcancel", () => {
+        dragTouchActive = false;
         dragInProgress = false;
         ignoreModalTapUntil = 0;
         lastModalTapAt = 0;
@@ -1890,6 +1911,9 @@
       dragOffsetY = 0;
       dragStartX = 0;
       dragStartY = 0;
+      dragTouchStartX = 0;
+      dragTouchStartY = 0;
+      dragTouchActive = false;
       dragInProgress = false;
       lastModalTapAt = 0;
       ignoreModalTapUntil = 0;

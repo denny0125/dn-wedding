@@ -1180,9 +1180,12 @@ cursor: default;
         </div>
        </div>
       </div>
-      <audio id="background-audio" preload="auto" loop>
+      <audio id="background-audio" preload="auto" autoplay playsinline loop>
       <source src="CanonInD-1.mp3?v=2b99e53" type="audio/mpeg">
       </audio>
+      <div id="music-autoplay-notice" aria-hidden="true" class="pointer-events-none fixed bottom-5 left-1/2 z-40 hidden -translate-x-1/2 rounded-full border border-[#d6cfc1] bg-[#fffdf9]/95 px-4 py-2 text-sm font-semibold text-[#55604f] shadow-[0_12px_30px_rgba(37,47,39,.16)] backdrop-blur-sm">
+       點一下任意位置即可開啟背景音樂
+      </div>
       <div class="mt-4 flex items-center justify-between gap-4">
       <div class="grid flex-1 grid-cols-6 gap-2"><button type="button" class="gallery-thumb is-active overflow-hidden rounded-sm" aria-label="查看第 1 張照片" aria-pressed="true"> <img data-template-id="gallery-thumb-1" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/求婚.png" alt="求婚.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 2 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-2" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/彈鋼琴.png" alt="彈鋼琴.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 3 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-3" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/地中海.PNG" alt="地中海.PNG"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 4 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-4" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/Ｎ過馬路.png" alt="Ｎ過馬路.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 5 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-5" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/DN躺著拍.PNG" alt="DN躺著拍.PNG"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 6 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-6" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/戶外夕陽.png" alt="戶外夕陽.png"> </button>
        </div><button data-template-id="gallery-pause-button" id="gallery-toggle" type="button" class="canva-button inline-flex shrink-0 items-center gap-2 rounded-sm border border-[#d6cfc1] px-3 py-2 text-xs font-semibold transition hover:bg-white" aria-pressed="false" style="background: rgb(248, 245, 238); color: rgb(85, 96, 79); font-weight: 600;"> <i id="toggle-icon" data-lucide="pause" class="h-3.5 w-3.5"></i> <span data-template-id="gallery-pause-label" class="canva-text" style="color: rgb(85, 96, 79); font-weight: 600; font-style: normal; font-size: 16px;">暫停播放</span> </button>
@@ -1273,6 +1276,7 @@ cursor: default;
     const toggleLabel = toggleButton.querySelector("span");
     const backgroundAudio = document.getElementById("background-audio");
     const musicToggleButton = document.getElementById("music-toggle");
+    const musicAutoplayNotice = document.getElementById("music-autoplay-notice");
 
     let activeSlide = 0;
     let autoplayEnabled = true;
@@ -1341,6 +1345,13 @@ cursor: default;
       createIconsSafely();
     }
 
+    function setMusicAutoplayNoticeVisible(visible) {
+      if (!musicAutoplayNotice) return;
+
+      musicAutoplayNotice.classList.toggle("hidden", !visible);
+      musicAutoplayNotice.setAttribute("aria-hidden", String(!visible));
+    }
+
     function removeMusicAutoplayUnlock() {
       if (!autoplayUnlockBound || !musicAutoplayUnlockHandler) return;
 
@@ -1350,6 +1361,7 @@ cursor: default;
 
       autoplayUnlockBound = false;
       musicAutoplayUnlockHandler = null;
+      setMusicAutoplayNoticeVisible(false);
     }
 
     function bindMusicAutoplayUnlock() {
@@ -1389,12 +1401,14 @@ cursor: default;
       try {
         await backgroundAudio.play();
         removeMusicAutoplayUnlock();
+        setMusicAutoplayNoticeVisible(false);
         updateMusicToggleUi();
         return true;
       } catch (_error) {
         updateMusicToggleUi();
         if (musicEnabled) {
           bindMusicAutoplayUnlock();
+          setMusicAutoplayNoticeVisible(true);
         }
         return false;
       }
@@ -1405,6 +1419,7 @@ cursor: default;
 
       musicEnabled = false;
       removeMusicAutoplayUnlock();
+      setMusicAutoplayNoticeVisible(false);
       backgroundAudio.pause();
       updateMusicToggleUi();
     }

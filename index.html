@@ -1360,6 +1360,12 @@ cursor: default;
     async function playBackgroundMusic() {
       if (!backgroundAudio) return false;
 
+      if (backgroundAudio.networkState === HTMLMediaElement.NETWORK_NO_SOURCE && backgroundAudio.dataset.fallbackApplied !== "true") {
+        backgroundAudio.dataset.fallbackApplied = "true";
+        backgroundAudio.src = "CanonInD.mp3";
+        backgroundAudio.load();
+      }
+
       try {
         await backgroundAudio.play();
         musicEnabled = true;
@@ -1552,6 +1558,13 @@ cursor: default;
 
     if (backgroundAudio) {
       backgroundAudio.volume = 0.35;
+      backgroundAudio.addEventListener("error", () => {
+        if (backgroundAudio.dataset.fallbackApplied === "true") return;
+        backgroundAudio.dataset.fallbackApplied = "true";
+        backgroundAudio.src = "CanonInD.mp3";
+        backgroundAudio.load();
+        playBackgroundMusic();
+      });
       backgroundAudio.addEventListener("play", () => {
         musicEnabled = true;
         updateMusicToggleUi();

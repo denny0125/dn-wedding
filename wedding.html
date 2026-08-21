@@ -1081,7 +1081,7 @@ cursor: default;
     <span></span><span></span>
   </div>
   <header class="w-full px-5 pt-5 md:px-10 md:pt-8">
-  <nav aria-label="婚禮頁面導覽" class="mx-auto flex max-w-6xl items-center justify-between border-b border-[#d9d2c4] pb-4"><span class="editorial-title text-lg italic text-[#66715a]">D + N</span> <div class="flex items-center gap-3"><span data-template-id="nav-date" class="canva-text text-xs font-medium uppercase tracking-[.18em]" style="color: rgb(102, 113, 90); font-weight: 600; font-style: normal; font-size: 16px;">2026 · 10 · 11</span><button id="music-toggle" type="button" class="canva-button inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#d6cfc1] transition hover:bg-white" aria-label="背景音樂開關" aria-pressed="false" style="background: rgb(248, 245, 238); color: rgb(85, 96, 79);"> <i id="music-toggle-icon" data-lucide="volume-x" class="h-4.5 w-4.5"></i> </button></div>
+  <nav aria-label="婚禮頁面導覽" class="mx-auto flex max-w-6xl items-center justify-between border-b border-[#d9d2c4] pb-4"><span class="editorial-title text-lg italic text-[#66715a]">D + N</span> <div class="flex items-center gap-3"><span data-template-id="nav-date" class="canva-text text-xs font-medium uppercase tracking-[.18em]" style="color: rgb(102, 113, 90); font-weight: 600; font-style: normal; font-size: 16px;">2026 · 10 · 11</span><button id="music-toggle" type="button" class="canva-button inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#d6cfc1] transition hover:bg-white" aria-label="關閉背景音樂" aria-pressed="true" style="background: rgb(248, 245, 238); color: rgb(85, 96, 79);"> <i id="music-toggle-icon" data-lucide="volume-2" class="h-4.5 w-4.5"></i> </button></div>
    </nav>
   </header>
   <main>
@@ -1278,7 +1278,7 @@ cursor: default;
     let autoplayEnabled = true;
     let autoplayTimer;
     let resumeTimer;
-    let musicEnabled = false;
+    let musicEnabled = true;
     let autoplayUnlockBound = false;
 
     function updateGallery(index) {
@@ -1599,12 +1599,12 @@ cursor: default;
     });
 
     musicToggleButton.addEventListener("click", async () => {
-      if (backgroundAudio.paused) {
-        await playBackgroundMusic();
+      if (musicEnabled) {
+        pauseBackgroundMusic();
         return;
       }
 
-      pauseBackgroundMusic();
+      await playBackgroundMusic();
     });
 
     gallery.addEventListener("keydown", (event) => {

@@ -315,23 +315,10 @@
     }
 
     .countdown-panel::before {
-      background:
-        radial-gradient(circle at 8% 18%, rgba(255, 240, 170, 1) 0 4px, rgba(255, 240, 170, 0) 7.5px),
-        radial-gradient(circle at 16% 62%, rgba(255, 208, 90, 1) 0 3.5px, rgba(255, 208, 90, 0) 6.5px),
-        radial-gradient(circle at 26% 28%, rgba(255, 249, 219, 1) 0 4.6px, rgba(255, 249, 219, 0) 8.2px),
-        radial-gradient(circle at 35% 74%, rgba(255, 223, 146, 1) 0 3.8px, rgba(255, 223, 146, 0) 6.6px),
-        radial-gradient(circle at 45% 22%, rgba(255, 246, 206, 1) 0 4.2px, rgba(255, 246, 206, 0) 7.8px),
-        radial-gradient(circle at 53% 66%, rgba(255, 216, 104, 1) 0 3.6px, rgba(255, 216, 104, 0) 6.8px),
-        radial-gradient(circle at 63% 30%, rgba(255, 250, 230, 1) 0 4.8px, rgba(255, 250, 230, 0) 8.4px),
-        radial-gradient(circle at 72% 72%, rgba(255, 220, 120, 1) 0 3.9px, rgba(255, 220, 120, 0) 7.2px),
-        radial-gradient(circle at 81% 40%, rgba(255, 245, 192, 1) 0 4.4px, rgba(255, 245, 192, 0) 7.9px),
-        radial-gradient(circle at 91% 68%, rgba(255, 235, 170, 1) 0 3.7px, rgba(255, 235, 170, 0) 6.8px),
-        radial-gradient(circle at 58% 46%, rgba(255, 248, 220, 1) 0 2.9px, rgba(255, 248, 220, 0) 5.5px),
-        radial-gradient(circle at 38% 46%, rgba(255, 212, 105, 1) 0 2.7px, rgba(255, 212, 105, 0) 5.1px);
-      filter: drop-shadow(0 0 12px rgba(255, 211, 98, .95)) drop-shadow(0 0 20px rgba(255, 238, 178, .82));
-      opacity: 1;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,0));
+      opacity: .9;
       mix-blend-mode: screen;
-      animation: countdownSparkle 2.8s ease-in-out infinite alternate;
     }
 
     .countdown-panel::after {
@@ -340,6 +327,35 @@
       transform: translateX(-18%) skewX(-18deg);
       opacity: .5;
       animation: countdownShimmer 6s ease-in-out infinite;
+    }
+
+    .countdown-stars {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 0 12px rgba(255, 209, 94, .7)) drop-shadow(0 0 18px rgba(255, 238, 180, .6));
+    }
+
+    .countdown-star {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,245,202,1) 28%, rgba(255,213,102,1) 58%, rgba(255,199,76,0) 100%);
+      opacity: 0;
+      transform: scale(0.5);
+      animation: twinkleStar var(--dur) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    .countdown-panel > p,
+    .countdown-panel > h2,
+    .countdown-panel > .countdown-grid {
+      position: relative;
+      z-index: 1;
     }
 
     .countdown-grid {
@@ -382,14 +398,14 @@
       text-shadow: 0 0 14px rgba(255,255,255,.32);
     }
 
-    @keyframes countdownSparkle {
-      0%, 100% { opacity: .18; transform: scale(.88); }
-      12% { opacity: .74; transform: scale(1.04); }
-      22% { opacity: .3; transform: scale(.92); }
-      38% { opacity: 1; transform: scale(1.18); }
-      58% { opacity: .66; transform: scale(1.02); }
-      74% { opacity: .96; transform: scale(1.15); }
-      88% { opacity: .32; transform: scale(.9); }
+    @keyframes twinkleStar {
+      0%, 100% { opacity: 0; transform: scale(.45); }
+      12% { opacity: .22; transform: scale(.72); }
+      20% { opacity: .9; transform: scale(1.25); }
+      36% { opacity: .65; transform: scale(.9); }
+      55% { opacity: 1; transform: scale(1.5); }
+      70% { opacity: .35; transform: scale(.78); }
+      86% { opacity: .92; transform: scale(1.2); }
     }
 
     @keyframes countdownShimmer {
@@ -1272,6 +1288,24 @@ cursor: default;
    </section>
    <section data-template-id="countdown-section" class="canva-section w-full px-5 py-14 md:px-10" style="background: rgba(233, 228, 216, .85);">
     <div class="countdown-panel mx-auto max-w-4xl text-center">
+     <div class="countdown-stars" aria-hidden="true">
+      <span class="countdown-star" style="--x: 8%; --y: 20%; --size: 6px; --dur: 2.2s; --delay: -.6s;"></span>
+      <span class="countdown-star" style="--x: 15%; --y: 60%; --size: 5px; --dur: 3.6s; --delay: -1.1s;"></span>
+      <span class="countdown-star" style="--x: 25%; --y: 28%; --size: 7px; --dur: 2.8s; --delay: -.2s;"></span>
+      <span class="countdown-star" style="--x: 33%; --y: 72%; --size: 5px; --dur: 2.9s; --delay: -1.9s;"></span>
+      <span class="countdown-star" style="--x: 42%; --y: 18%; --size: 7px; --dur: 3.2s; --delay: -.9s;"></span>
+      <span class="countdown-star" style="--x: 52%; --y: 62%; --size: 6px; --dur: 2.4s; --delay: -2.3s;"></span>
+      <span class="countdown-star" style="--x: 60%; --y: 30%; --size: 8px; --dur: 3.8s; --delay: -.4s;"></span>
+      <span class="countdown-star" style="--x: 68%; --y: 74%; --size: 6px; --dur: 2.7s; --delay: -1.7s;"></span>
+      <span class="countdown-star" style="--x: 78%; --y: 38%; --size: 7px; --dur: 3.1s; --delay: -2.8s;"></span>
+      <span class="countdown-star" style="--x: 90%; --y: 65%; --size: 6px; --dur: 2.5s; --delay: -1.3s;"></span>
+      <span class="countdown-star" style="--x: 57%; --y: 44%; --size: 5px; --dur: 3.4s; --delay: -1.8s;"></span>
+      <span class="countdown-star" style="--x: 38%; --y: 46%; --size: 4px; --dur: 2.6s; --delay: -2.5s;"></span>
+      <span class="countdown-star" style="--x: 82%; --y: 20%; --size: 5px; --dur: 3.7s; --delay: -.7s;"></span>
+      <span class="countdown-star" style="--x: 70%; --y: 57%; --size: 4px; --dur: 2.1s; --delay: -1.4s;"></span>
+      <span class="countdown-star" style="--x: 92%; --y: 28%; --size: 5px; --dur: 3.3s; --delay: -2.2s;"></span>
+      <span class="countdown-star" style="--x: 48%; --y: 80%; --size: 5px; --dur: 2.8s; --delay: -3.1s;"></span>
+     </div>
      <p data-template-id="countdown-kicker" class="canva-text mb-3 font-semibold uppercase tracking-[.25em]" style="color: rgb(184, 111, 104); font-weight: 600; font-style: normal; font-size: 16px;">距離婚禮還有</p>
      <h2 data-template-id="countdown-heading" class="canva-text editorial-title mb-9 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 24px;">倒數我們的重要日子</h2>
      <div class="countdown-grid grid grid-cols-4 gap-2 sm:gap-5">

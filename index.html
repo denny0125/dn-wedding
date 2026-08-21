@@ -1555,6 +1555,13 @@
       return Math.min(Math.max(value, 1), 2.4);
     };
 
+    const clampPhotoModalDrag = () => {
+      const maxX = Math.max(0, (photoModalScale - 1) * 140);
+      const maxY = Math.max(0, (photoModalScale - 1) * 180);
+      dragOffsetX = Math.min(maxX, Math.max(-maxX, dragOffsetX));
+      dragOffsetY = Math.min(maxY, Math.max(-maxY, dragOffsetY));
+    };
+
     function findPhotoModalHost(image) {
       return image.closest(".hero-image-wrap") ||
         image.closest(".gallery-slide")?.parentElement ||
@@ -1699,8 +1706,11 @@
 
       modalImage = document.createElement("img");
       modalImage.className = "photo-modal-image";
-      modalImage.style.transform = "translate(0px, 0px) scale(1)";
+      modalImage.style.transform = "translate3d(0px, 0px, 0) scale(1)";
       modalImage.style.willChange = "transform";
+      modalImage.style.transition = "transform 0.08s ease-out";
+      modalImage.style.backfaceVisibility = "hidden";
+      modalImage.style.webkitBackfaceVisibility = "hidden";
 
       modalImage.src = image.currentSrc || image.src;
       modalImage.alt = image.alt || "放大查看照片";
@@ -1743,7 +1753,8 @@
       const applyPhotoModalTransform = () => {
         if (!modalImage) return;
         photoModalScale = clampPhotoModalScale(photoModalScale);
-        modalImage.style.transform = `translate(${dragOffsetX}px, ${dragOffsetY}px) scale(${photoModalScale})`;
+        clampPhotoModalDrag();
+        modalImage.style.transform = `translate3d(${dragOffsetX}px, ${dragOffsetY}px, 0) scale(${photoModalScale})`;
       };
 
       const resetPhotoModalToOriginal = () => {
@@ -1753,19 +1764,15 @@
         pinchStartDistance = 0;
         pinchStartScale = 1;
         dragInProgress = false;
+        modalImage.style.transition = "transform 0.08s ease-out";
         applyPhotoModalTransform();
       };
-
-      modalPortal.addEventListener("dblclick", () => {
-        if (photoModalScale > 1.02) {
-          resetPhotoModalToOriginal();
-        }
-      });
 
       modalPortal.addEventListener("touchstart", (event) => {
         const touch = event.touches[0];
         if (event.touches.length === 2) {
           dragInProgress = false;
+          modalImage.style.transition = "none";
           suppressModalClickClose = true;
           pinchStartDistance = getTouchDistance(event.touches);
           pinchStartScale = photoModalScale;
@@ -1774,6 +1781,7 @@
 
         if (photoModalScale > 1.04 && touch) {
           dragInProgress = true;
+          modalImage.style.transition = "none";
           suppressModalClickClose = true;
           dragStartX = touch.clientX - dragOffsetX;
           dragStartY = touch.clientY - dragOffsetY;
@@ -1802,7 +1810,7 @@
 
       modalPortal.addEventListener("touchend", (event) => {
         const now = Date.now();
-        const isDoubleTap = now - lastModalTapAt < 280 && photoModalScale > 1.02;
+        const isDoubleTap = event.changedTouches.length === 1 && photoModalScale > 1.02 && now - lastModalTapAt < 280;
         lastModalTapAt = now;
 
         if (isDoubleTap) {
@@ -1817,6 +1825,7 @@
         dragInProgress = false;
         pinchStartDistance = 0;
         pinchStartScale = photoModalScale;
+        modalImage.style.transition = "transform 0.08s ease-out";
       }, { passive: true });
 
       modalPortal.addEventListener("touchcancel", () => {

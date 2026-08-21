@@ -316,19 +316,22 @@
 
     .countdown-panel::before {
       background:
-        radial-gradient(circle at 12% 18%, rgba(255, 247, 209, 1) 0 3.3px, rgba(255, 247, 209, 0) 5.8px),
-        radial-gradient(circle at 22% 66%, rgba(255, 215, 128, 1) 0 2.7px, rgba(255, 215, 128, 0) 5.4px),
-        radial-gradient(circle at 36% 30%, rgba(255, 246, 196, 1) 0 3.2px, rgba(255, 246, 196, 0) 5.7px),
-        radial-gradient(circle at 47% 78%, rgba(255, 228, 153, 1) 0 2.9px, rgba(255, 228, 153, 0) 5.6px),
-        radial-gradient(circle at 61% 24%, rgba(255, 249, 222, 1) 0 3.4px, rgba(255, 249, 222, 0) 6px),
-        radial-gradient(circle at 72% 61%, rgba(255, 211, 98, 1) 0 2.8px, rgba(255, 211, 98, 0) 5.3px),
-        radial-gradient(circle at 84% 36%, rgba(255, 244, 187, 1) 0 3.1px, rgba(255, 244, 187, 0) 5.4px),
-        radial-gradient(circle at 92% 70%, rgba(255, 234, 168, 1) 0 2.5px, rgba(255, 234, 168, 0) 4.8px),
-        radial-gradient(circle at 58% 48%, rgba(255, 249, 219, 1) 0 2.3px, rgba(255, 249, 219, 0) 4.8px);
-      filter: drop-shadow(0 0 10px rgba(255, 211, 98, .95)) drop-shadow(0 0 18px rgba(255, 238, 178, .8));
+        radial-gradient(circle at 8% 18%, rgba(255, 240, 170, 1) 0 4px, rgba(255, 240, 170, 0) 7.5px),
+        radial-gradient(circle at 16% 62%, rgba(255, 208, 90, 1) 0 3.5px, rgba(255, 208, 90, 0) 6.5px),
+        radial-gradient(circle at 26% 28%, rgba(255, 249, 219, 1) 0 4.6px, rgba(255, 249, 219, 0) 8.2px),
+        radial-gradient(circle at 35% 74%, rgba(255, 223, 146, 1) 0 3.8px, rgba(255, 223, 146, 0) 6.6px),
+        radial-gradient(circle at 45% 22%, rgba(255, 246, 206, 1) 0 4.2px, rgba(255, 246, 206, 0) 7.8px),
+        radial-gradient(circle at 53% 66%, rgba(255, 216, 104, 1) 0 3.6px, rgba(255, 216, 104, 0) 6.8px),
+        radial-gradient(circle at 63% 30%, rgba(255, 250, 230, 1) 0 4.8px, rgba(255, 250, 230, 0) 8.4px),
+        radial-gradient(circle at 72% 72%, rgba(255, 220, 120, 1) 0 3.9px, rgba(255, 220, 120, 0) 7.2px),
+        radial-gradient(circle at 81% 40%, rgba(255, 245, 192, 1) 0 4.4px, rgba(255, 245, 192, 0) 7.9px),
+        radial-gradient(circle at 91% 68%, rgba(255, 235, 170, 1) 0 3.7px, rgba(255, 235, 170, 0) 6.8px),
+        radial-gradient(circle at 58% 46%, rgba(255, 248, 220, 1) 0 2.9px, rgba(255, 248, 220, 0) 5.5px),
+        radial-gradient(circle at 38% 46%, rgba(255, 212, 105, 1) 0 2.7px, rgba(255, 212, 105, 0) 5.1px);
+      filter: drop-shadow(0 0 12px rgba(255, 211, 98, .95)) drop-shadow(0 0 20px rgba(255, 238, 178, .82));
       opacity: 1;
       mix-blend-mode: screen;
-      animation: countdownSparkle 3.6s ease-in-out infinite alternate;
+      animation: countdownSparkle 2.8s ease-in-out infinite alternate;
     }
 
     .countdown-panel::after {
@@ -380,11 +383,13 @@
     }
 
     @keyframes countdownSparkle {
-      0% { opacity: .7; transform: scale(.96); }
-      22% { opacity: .92; transform: scale(1.02); }
-      46% { opacity: 1; transform: scale(1.06); }
-      68% { opacity: .96; transform: scale(1.03); }
-      100% { opacity: .8; transform: scale(.97); }
+      0%, 100% { opacity: .18; transform: scale(.88); }
+      12% { opacity: .74; transform: scale(1.04); }
+      22% { opacity: .3; transform: scale(.92); }
+      38% { opacity: 1; transform: scale(1.18); }
+      58% { opacity: .66; transform: scale(1.02); }
+      74% { opacity: .96; transform: scale(1.15); }
+      88% { opacity: .32; transform: scale(.9); }
     }
 
     @keyframes countdownShimmer {

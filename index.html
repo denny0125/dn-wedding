@@ -1544,6 +1544,11 @@
     let pinchStartDistance = 0;
     let pinchStartScale = 1;
     let suppressModalClickClose = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragInProgress = false;
 
     function findPhotoModalHost(image) {
       return image.closest(".hero-image-wrap") ||
@@ -1669,6 +1674,11 @@
       pinchStartDistance = 0;
       pinchStartScale = 1;
       suppressModalClickClose = false;
+      dragOffsetX = 0;
+      dragOffsetY = 0;
+      dragStartX = 0;
+      dragStartY = 0;
+      dragInProgress = false;
 
       modalHost.classList.add("photo-modal-host");
       modalPortal = document.createElement("div");
@@ -1683,7 +1693,7 @@
 
       modalImage = document.createElement("img");
       modalImage.className = "photo-modal-image";
-      modalImage.style.transform = "scale(1)";
+      modalImage.style.transform = "translate(0px, 0px) scale(1)";
 
       modalImage.src = image.currentSrc || image.src;
       modalImage.alt = image.alt || "放大查看照片";
@@ -1723,11 +1733,26 @@
         return Math.hypot(dx, dy);
       };
 
+      const applyPhotoModalTransform = () => {
+        if (!modalImage) return;
+        modalImage.style.transform = `translate(${dragOffsetX}px, ${dragOffsetY}px) scale(${photoModalScale})`;
+      };
+
       modalPortal.addEventListener("touchstart", (event) => {
+        const touch = event.touches[0];
         if (event.touches.length === 2) {
+          dragInProgress = false;
           suppressModalClickClose = true;
           pinchStartDistance = getTouchDistance(event.touches);
           pinchStartScale = photoModalScale;
+          return;
+        }
+
+        if (photoModalScale > 1.04 && touch) {
+          dragInProgress = true;
+          suppressModalClickClose = true;
+          dragStartX = touch.clientX - dragOffsetX;
+          dragStartY = touch.clientY - dragOffsetY;
         }
       }, { passive: true });
 
@@ -1738,14 +1763,30 @@
           const currentDistance = getTouchDistance(event.touches);
           const nextScale = Math.min(Math.max(pinchStartScale * (currentDistance / pinchStartDistance), 1), 2.8);
           photoModalScale = nextScale;
-          modalImage.style.transform = `scale(${nextScale})`;
+          applyPhotoModalTransform();
+          return;
+        }
+
+        if (dragInProgress && event.touches.length === 1 && modalImage) {
+          event.preventDefault();
+          const touch = event.touches[0];
+          dragOffsetX = touch.clientX - dragStartX;
+          dragOffsetY = touch.clientY - dragStartY;
+          applyPhotoModalTransform();
         }
       }, { passive: false });
 
       modalPortal.addEventListener("touchend", () => {
-        if (pinchStartDistance > 0) {
+        if (dragInProgress || pinchStartDistance > 0) {
           suppressModalClickClose = true;
         }
+        dragInProgress = false;
+        pinchStartDistance = 0;
+        pinchStartScale = photoModalScale;
+      }, { passive: true });
+
+      modalPortal.addEventListener("touchcancel", () => {
+        dragInProgress = false;
         pinchStartDistance = 0;
         pinchStartScale = photoModalScale;
       }, { passive: true });
@@ -1778,6 +1819,11 @@
       pinchStartDistance = 0;
       pinchStartScale = 1;
       suppressModalClickClose = false;
+      dragOffsetX = 0;
+      dragOffsetY = 0;
+      dragStartX = 0;
+      dragStartY = 0;
+      dragInProgress = false;
 
       portalToRemove.remove();
       if (modalHost && !modalHost.querySelector(".photo-modal-portal")) {

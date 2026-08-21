@@ -1550,6 +1550,7 @@
     let dragStartY = 0;
     let dragInProgress = false;
     let lastModalTapAt = 0;
+    let pinchGestureJustEnded = false;
 
     const clampPhotoModalScale = (value) => {
       return Math.min(Math.max(value, 1), 2.4);
@@ -1692,6 +1693,7 @@
       dragStartY = 0;
       dragInProgress = false;
       lastModalTapAt = 0;
+      pinchGestureJustEnded = false;
 
       modalHost.classList.add("photo-modal-host");
       modalPortal = document.createElement("div");
@@ -1771,6 +1773,7 @@
       modalPortal.addEventListener("touchstart", (event) => {
         const touch = event.touches[0];
         if (event.touches.length === 2) {
+          pinchGestureJustEnded = false;
           dragInProgress = false;
           modalImage.style.transition = "none";
           suppressModalClickClose = true;
@@ -1809,8 +1812,15 @@
       }, { passive: false });
 
       modalPortal.addEventListener("touchend", (event) => {
+        const pinchJustEnded = pinchStartDistance > 0;
         const now = Date.now();
-        const isDoubleTap = event.changedTouches.length === 1 && photoModalScale > 1.02 && now - lastModalTapAt < 280;
+
+        if (pinchJustEnded) {
+          pinchGestureJustEnded = true;
+          lastModalTapAt = 0;
+        }
+
+        const isDoubleTap = !pinchJustEnded && event.changedTouches.length === 1 && photoModalScale > 1.02 && now - lastModalTapAt < 280;
         lastModalTapAt = now;
 
         if (isDoubleTap) {
@@ -1819,7 +1829,7 @@
           return;
         }
 
-        if (dragInProgress || pinchStartDistance > 0) {
+        if (dragInProgress || pinchJustEnded) {
           suppressModalClickClose = true;
         }
         dragInProgress = false;
@@ -1829,6 +1839,7 @@
       }, { passive: true });
 
       modalPortal.addEventListener("touchcancel", () => {
+        pinchGestureJustEnded = false;
         dragInProgress = false;
         pinchStartDistance = 0;
         pinchStartScale = photoModalScale;

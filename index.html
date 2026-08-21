@@ -1212,13 +1212,29 @@
     [data-template-id="venue-map-button"],
     #traffic-info-button {
       -webkit-touch-callout: none;
+      -webkit-appearance: none;
+      appearance: none;
       touch-action: manipulation;
+      background: transparent;
+      background-color: transparent;
+      box-shadow: none;
+      outline: none;
+      filter: none;
     }
 
     #traffic-info-button:active,
-    [data-template-id="venue-map-button"]:active {
-      background-color: transparent;
-      box-shadow: none;
+    #traffic-info-button:hover,
+    #traffic-info-button:focus,
+    #traffic-info-button:focus-visible,
+    [data-template-id="venue-map-button"]:active,
+    [data-template-id="venue-map-button"]:hover,
+    [data-template-id="venue-map-button"]:focus,
+    [data-template-id="venue-map-button"]:focus-visible {
+      background-color: transparent !important;
+      box-shadow: none !important;
+      outline: none !important;
+      filter: none !important;
+      opacity: 1 !important;
     }
 
     .photo-modal-host {
@@ -1788,11 +1804,23 @@ cursor: default;
 
     const trafficInfoButton = document.getElementById("traffic-info-button");
     const trafficMapImage = document.getElementById("traffic-map-image");
-    if (trafficInfoButton && trafficMapImage) {
+    if (trafficInfoButton) {
+      const clearTapState = () => {
+        trafficInfoButton.blur();
+        trafficInfoButton.style.backgroundColor = "transparent";
+        trafficInfoButton.style.boxShadow = "none";
+      };
+
+      trafficInfoButton.addEventListener("pointerup", clearTapState, { passive: true });
+      trafficInfoButton.addEventListener("touchend", clearTapState, { passive: true });
       trafficInfoButton.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        openPhotoModal(trafficMapImage, event);
+        clearTapState();
+
+        if (trafficMapImage) {
+          openPhotoModal(trafficMapImage, event);
+        }
       });
     }
 

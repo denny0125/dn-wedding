@@ -1091,7 +1091,7 @@ cursor: default;
       <p data-template-id="hero-kicker" class="canva-text mb-5 font-semibold uppercase tracking-[.25em]" style="color: rgb(184, 111, 104); font-weight: 600; font-style: normal; font-size: 21px;">誠摯邀請您蒞臨我們的婚禮</p>
       <h1 data-template-id="couple-names" class="canva-text editorial-title mb-6 font-medium leading-[1.06]" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 56px; line-height: 1.06;">Denny <span class="hero-amp">&amp;</span> Nydia</h1>
       <div class="hero-divider botanical-line mb-6 w-24"></div>
-      <p data-template-id="hero-date" class="canva-text mb-2 font-semibold uppercase tracking-[.15em]" style="color: rgb(102, 113, 90); font-weight: 400; font-style: normal; font-size: 20px;"><span>鄧福順＆劉思吟</span><br><span>2026 年 10 月 11 日・星期日</span></p>
+      <p data-template-id="hero-date" class="canva-text mb-2 font-semibold uppercase tracking-[.15em]" style="color: rgb(102, 113, 90); font-weight: 400; font-style: normal; font-size: 20px;"><span>鄧福順＆劉思吟</span><br><span>2026 年 10 月 11 日・星期日 </span><br><span>盛大演出</span></p>
       <p data-template-id="hero-location" class="canva-text" style="color: rgb(76, 85, 77); font-weight: 400; font-style: normal; font-size: 20px;">邀您共度一日，分享這份喜悅，和見證我們的愛情。</p>
      </div>
     <div class="reveal hero-image-wrap relative self-start overflow-hidden rounded-sm bg-[#ded8cb] shadow-[0_18px_50px_rgba(45,55,43,.18)]"><img data-template-id="hero-image" loading="eager" fetchpriority="high" decoding="async" class="canva-image block h-auto w-full cursor-zoom-in object-contain" src="pics/三生三世.png" alt="三生三世.png">
@@ -1180,9 +1180,12 @@ cursor: default;
         </div>
        </div>
       </div>
+      <audio id="background-audio" preload="auto" loop>
+       <source src="CanonInD.mp3" type="audio/mpeg">
+      </audio>
       <div class="mt-4 flex items-center justify-between gap-4">
       <div class="grid flex-1 grid-cols-6 gap-2"><button type="button" class="gallery-thumb is-active overflow-hidden rounded-sm" aria-label="查看第 1 張照片" aria-pressed="true"> <img data-template-id="gallery-thumb-1" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/求婚.png" alt="求婚.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 2 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-2" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/彈鋼琴.png" alt="彈鋼琴.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 3 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-3" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/地中海.PNG" alt="地中海.PNG"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 4 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-4" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/Ｎ過馬路.png" alt="Ｎ過馬路.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 5 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-5" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/DN躺著拍.PNG" alt="DN躺著拍.PNG"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 6 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-6" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/戶外夕陽.png" alt="戶外夕陽.png"> </button>
-       </div><button data-template-id="gallery-pause-button" id="gallery-toggle" type="button" class="canva-button inline-flex shrink-0 items-center gap-2 rounded-sm border border-[#d6cfc1] px-3 py-2 text-xs font-semibold transition hover:bg-white" aria-pressed="false" style="background: rgb(248, 245, 238); color: rgb(85, 96, 79); font-weight: 600;"> <i id="toggle-icon" data-lucide="pause" class="h-3.5 w-3.5"></i> <span data-template-id="gallery-pause-label" class="canva-text" style="color: rgb(85, 96, 79); font-weight: 600; font-style: normal; font-size: 16px;">暫停播放</span> </button>
+       </div><div class="flex shrink-0 items-center gap-2"><button id="music-toggle" type="button" class="canva-button inline-flex items-center gap-2 rounded-sm border border-[#d6cfc1] px-3 py-2 text-xs font-semibold transition hover:bg-white" aria-pressed="false" style="background: rgb(248, 245, 238); color: rgb(85, 96, 79); font-weight: 600;"> <i id="music-toggle-icon" data-lucide="volume-x" class="h-3.5 w-3.5"></i> <span id="music-toggle-label" class="canva-text" style="color: rgb(85, 96, 79); font-weight: 600; font-style: normal; font-size: 16px;">播放音樂</span> </button><button data-template-id="gallery-pause-button" id="gallery-toggle" type="button" class="canva-button inline-flex items-center gap-2 rounded-sm border border-[#d6cfc1] px-3 py-2 text-xs font-semibold transition hover:bg-white" aria-pressed="false" style="background: rgb(248, 245, 238); color: rgb(85, 96, 79); font-weight: 600;"> <i id="toggle-icon" data-lucide="pause" class="h-3.5 w-3.5"></i> <span data-template-id="gallery-pause-label" class="canva-text" style="color: rgb(85, 96, 79); font-weight: 600; font-style: normal; font-size: 16px;">暫停播放</span> </button></div>
       </div>
      </div>
     </div>
@@ -1203,7 +1206,7 @@ cursor: default;
      <aside class="pt-2">
       <p data-template-id="rsvp-kicker" class="canva-text mb-4 font-semibold uppercase tracking-[.25em]" style="color: rgb(184, 111, 104); font-weight: 600; font-style: normal; font-size: 17px;">敬請回覆</p>
       <h2 data-template-id="rsvp-heading" class="canva-text editorial-title mb-5 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 24px;">誠摯邀請您蒞臨</h2>
-      <p data-template-id="rsvp-copy" class="canva-text max-w-sm leading-7" style="color: rgb(93, 102, 94); font-weight: 700; font-size: 19px;"><span data-template-id="rsvp-copy-main" class="canva-text" style="color: rgb(93, 102, 94); font-weight: 700; font-style: normal; font-size: 19px;">期待您參加我們的婚禮，是我們莫大的榮幸</span><br><span data-template-id="rsvp-copy-deadline" class="canva-text font-bold" style="color: rgb(179, 38, 30); font-weight: 700; font-style: normal; font-size: 22px;">敬請於 2026 年 9 月 18 日前回覆。</span><br><span data-template-id="rsvp-copy-thanks" class="canva-text" style="color: rgb(93, 102, 94); font-weight: 700; font-style: normal; font-size: 19px;">感謝您</span></p>
+      <p data-template-id="rsvp-copy" class="canva-text max-w-sm leading-7" style="color: rgb(93, 102, 94); font-weight: 700; font-size: 19px;"><span data-template-id="rsvp-copy-main" class="canva-text" style="color: rgb(93, 102, 94); font-weight: 700; font-style: normal; font-size: 19px;">期待您參加我們的婚禮，是我們莫大的榮幸</span><br><span data-template-id="rsvp-copy-deadline" class="canva-text font-bold" style="color: rgb(179, 38, 30); font-weight: 700; font-style: normal; font-size: 22px;">敬請於 2026 年 9 月 12 日前回覆。</span><br><span data-template-id="rsvp-copy-thanks" class="canva-text" style="color: rgb(93, 102, 94); font-weight: 700; font-style: normal; font-size: 19px;">感謝您</span></p>
      </aside>
      <form id="rsvp-form" class="rounded-sm border border-[#ddd6c7] bg-white/50 p-6 shadow-[0_12px_40px_rgba(65,72,58,.08)] sm:p-8">
       <div class="grid gap-5 sm:grid-cols-2">
@@ -1245,6 +1248,12 @@ cursor: default;
    </div>
   </footer>
   <script>
+    const isPublicView = window.__WEDDING_PUBLIC_VIEW__ === true || new URLSearchParams(window.location.search).get("view") === "public";
+    const rsvpSection = document.querySelector(".rsvp-handwriting");
+    if (isPublicView && rsvpSection) {
+      rsvpSection.remove();
+    }
+
     const targetDate = new Date("2026-10-11T11:00:00+08:00");
 
     function updateCountdown() {
@@ -1261,11 +1270,18 @@ cursor: default;
     const counter = document.getElementById("slide-counter");
     const toggleButton = document.getElementById("gallery-toggle");
     const toggleIcon = document.getElementById("toggle-icon");
+    const toggleLabel = toggleButton.querySelector("span");
+    const backgroundAudio = document.getElementById("background-audio");
+    const musicToggleButton = document.getElementById("music-toggle");
+    const musicToggleIcon = document.getElementById("music-toggle-icon");
+    const musicToggleLabel = document.getElementById("music-toggle-label");
 
     let activeSlide = 0;
     let autoplayEnabled = true;
     let autoplayTimer;
     let resumeTimer;
+    let musicEnabled = false;
+    let autoplayUnlockBound = false;
 
     function updateGallery(index) {
       activeSlide = (index + slides.length) % slides.length;
@@ -1315,6 +1331,55 @@ cursor: default;
       if (window.lucide && typeof window.lucide.createIcons === "function") {
         window.lucide.createIcons();
       }
+    }
+
+    function updateMusicToggleUi() {
+      musicToggleButton.setAttribute("aria-pressed", String(musicEnabled));
+      musicToggleIcon.setAttribute("data-lucide", musicEnabled ? "volume-2" : "volume-x");
+      musicToggleLabel.textContent = musicEnabled ? "暫停音樂" : "播放音樂";
+      createIconsSafely();
+    }
+
+    function bindMusicAutoplayUnlock() {
+      if (autoplayUnlockBound) return;
+      autoplayUnlockBound = true;
+
+      const unlockAudio = async () => {
+        const didStart = await playBackgroundMusic();
+        if (didStart) {
+          ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+            document.removeEventListener(eventName, unlockAudio);
+          });
+        }
+      };
+
+      ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+        document.addEventListener(eventName, unlockAudio, { passive: true });
+      });
+    }
+
+    async function playBackgroundMusic() {
+      if (!backgroundAudio) return false;
+
+      try {
+        await backgroundAudio.play();
+        musicEnabled = true;
+        updateMusicToggleUi();
+        return true;
+      } catch (_error) {
+        musicEnabled = false;
+        updateMusicToggleUi();
+        bindMusicAutoplayUnlock();
+        return false;
+      }
+    }
+
+    function pauseBackgroundMusic() {
+      if (!backgroundAudio) return;
+
+      backgroundAudio.pause();
+      musicEnabled = false;
+      updateMusicToggleUi();
     }
 
     function createPhotoModal(image) {
@@ -1453,6 +1518,7 @@ cursor: default;
     }
 
     function startAutoplay() {
+      clearTimeout(resumeTimer);
       clearInterval(autoplayTimer);
       if (autoplayEnabled) {
         autoplayTimer = setInterval(() => updateGallery(activeSlide + 1), 5000);
@@ -1464,6 +1530,37 @@ cursor: default;
       clearInterval(autoplayTimer);
       clearTimeout(resumeTimer);
       resumeTimer = setTimeout(startAutoplay, 7000);
+    }
+
+    function updateAutoplayToggleUi() {
+      toggleButton.setAttribute("aria-pressed", String(!autoplayEnabled));
+      toggleIcon.setAttribute("data-lucide", autoplayEnabled ? "pause" : "play");
+      toggleLabel.textContent = autoplayEnabled ? "暫停播放" : "開始播放";
+      createIconsSafely();
+    }
+
+    function setAutoplayState(nextState) {
+      autoplayEnabled = nextState;
+      clearTimeout(resumeTimer);
+      clearInterval(autoplayTimer);
+
+      if (autoplayEnabled) {
+        startAutoplay();
+      }
+
+      updateAutoplayToggleUi();
+    }
+
+    if (backgroundAudio) {
+      backgroundAudio.volume = 0.35;
+      backgroundAudio.addEventListener("play", () => {
+        musicEnabled = true;
+        updateMusicToggleUi();
+      });
+      backgroundAudio.addEventListener("pause", () => {
+        musicEnabled = false;
+        updateMusicToggleUi();
+      });
     }
 
     document.getElementById("previous-slide").addEventListener("click", () => {
@@ -1486,12 +1583,16 @@ cursor: default;
     });
 
     toggleButton.addEventListener("click", () => {
-      autoplayEnabled = !autoplayEnabled;
-      toggleButton.setAttribute("aria-pressed", String(!autoplayEnabled));
-      toggleIcon.setAttribute("data-lucide", autoplayEnabled ? "pause" : "play");
-      clearTimeout(resumeTimer);
-      startAutoplay();
-      createIconsSafely();
+      setAutoplayState(!autoplayEnabled);
+    });
+
+    musicToggleButton.addEventListener("click", async () => {
+      if (backgroundAudio.paused) {
+        await playBackgroundMusic();
+        return;
+      }
+
+      pauseBackgroundMusic();
     });
 
     gallery.addEventListener("keydown", (event) => {
@@ -1506,181 +1607,189 @@ cursor: default;
       }
     });
 
-    const form = document.getElementById("rsvp-form");
-    const submitButton = document.getElementById("submit-button");
-    const statusMessage = document.getElementById("form-status");
-    const replySummary = document.getElementById("reply-summary");
-    const summaryThanks = document.getElementById("summary-thanks");
-    const summaryName = document.getElementById("summary-name");
-    const summaryPhone = document.getElementById("summary-phone");
-    const summaryAttending = document.getElementById("summary-attending");
-    const summaryCountLabel = document.getElementById("summary-count-label");
-    const summaryCount = document.getElementById("summary-count");
-    const summaryNotes = document.getElementById("summary-notes");
-    const formFields = form.querySelector("div.grid");
-    const attendingField = document.getElementById("attending");
-    const guestCountField = document.getElementById("guest-count-field");
-    const guestCountInput = document.getElementById("guest-count");
+    function initializeRsvpFormSection() {
+      const form = document.getElementById("rsvp-form");
+      if (!form) return;
 
-    // Fill these values from your Google Form prefilled link.
-    const GOOGLE_FORM_CONFIG = {
-      formUrl: "https://docs.google.com/forms/d/e/1FAIpQLSc0GaK8mDyoj6NsNBP_Ut1NUlDjqjz0W_SHZ3fBVmhICMRRhg/viewform?usp=publish-editor",
-      entries: {
-        guestName: "entry.1850874758",
-        phone: "entry.870164790",
-        attending: "entry.78765622",
-        guestCount: "entry.401763354",
-        dietaryNotes: "entry.207661896"
-      }
-    };
+      const submitButton = document.getElementById("submit-button");
+      const statusMessage = document.getElementById("form-status");
+      const replySummary = document.getElementById("reply-summary");
+      const summaryThanks = document.getElementById("summary-thanks");
+      const summaryName = document.getElementById("summary-name");
+      const summaryPhone = document.getElementById("summary-phone");
+      const summaryAttending = document.getElementById("summary-attending");
+      const summaryCountLabel = document.getElementById("summary-count-label");
+      const summaryCount = document.getElementById("summary-count");
+      const summaryNotes = document.getElementById("summary-notes");
+      const formFields = form.querySelector("div.grid");
+      const attendingField = document.getElementById("attending");
+      const guestCountField = document.getElementById("guest-count-field");
+      const guestCountInput = document.getElementById("guest-count");
 
-    function showStatus(message, color) {
-      statusMessage.textContent = message;
-      statusMessage.style.color = color;
-    }
-
-    function getReplySummaryData() {
-      const attendingValue = attendingField.value;
-      const isAttending = attendingValue === "欣然接受出席";
-
-      return {
-        name: document.getElementById("guest-name").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        attending: attendingValue,
-        count: isAttending ? String(Number(guestCountInput.value)) : "-",
-        notes: document.getElementById("dietary-notes").value.trim() || "無"
+      const GOOGLE_FORM_CONFIG = {
+        formUrl: "https://docs.google.com/forms/d/e/1FAIpQLSc0GaK8mDyoj6NsNBP_Ut1NUlDjqjz0W_SHZ3fBVmhICMRRhg/viewform?usp=publish-editor",
+        entries: {
+          guestName: "entry.1850874758",
+          phone: "entry.870164790",
+          attending: "entry.78765622",
+          guestCount: "entry.401763354",
+          dietaryNotes: "entry.207661896"
+        }
       };
-    }
 
-    function toggleGuestCountVisibility() {
-      const isAttending = attendingField.value === "欣然接受出席";
-
-      guestCountField.classList.toggle("hidden", !isAttending);
-      guestCountInput.required = isAttending;
-
-      if (!isAttending) {
-        guestCountInput.value = "1";
-      }
-    }
-
-    function showReplySummary(summary) {
-      const isAttending = summary.attending === "欣然接受出席";
-
-      summaryThanks.textContent = isAttending
-        ? `${summary.name}，感謝您的回覆，我們婚禮當天見。`
-        : `${summary.name}，感謝您的回覆與祝福。`;
-      summaryName.textContent = summary.name || "-";
-      summaryPhone.textContent = summary.phone || "-";
-      summaryAttending.textContent = summary.attending || "-";
-      summaryCount.textContent = summary.count || "-";
-      summaryNotes.textContent = summary.notes || "無";
-      summaryCountLabel.classList.toggle("hidden", !isAttending);
-      summaryCount.classList.toggle("hidden", !isAttending);
-      replySummary.classList.remove("hidden");
-
-      if (formFields) {
-        formFields.classList.add("hidden");
-      }
-      submitButton.classList.add("hidden");
-      statusMessage.classList.add("hidden");
-    }
-
-    function isGoogleFormConfigured() {
-      const { formUrl, entries } = GOOGLE_FORM_CONFIG;
-      if (!formUrl || typeof formUrl !== "string") return false;
-      if (!getGoogleFormEndpoint()) return false;
-
-      return [
-        entries.guestName,
-        entries.phone,
-        entries.attending,
-        entries.guestCount,
-        entries.dietaryNotes
-      ].every((entryId) => typeof entryId === "string" && entryId.startsWith("entry."));
-    }
-
-    function getGoogleFormEndpoint() {
-      const { formUrl } = GOOGLE_FORM_CONFIG;
-
-      const publicMatch = formUrl.match(/\/forms\/d\/e\/([^/]+)/);
-      if (publicMatch && publicMatch[1]) {
-        return `https://docs.google.com/forms/d/e/${publicMatch[1]}/formResponse`;
+      function showStatus(message, color) {
+        statusMessage.textContent = message;
+        statusMessage.style.color = color;
       }
 
-      const editorMatch = formUrl.match(/\/forms\/d\/([^/]+)/);
-      if (editorMatch && editorMatch[1]) {
-        return `https://docs.google.com/forms/d/${editorMatch[1]}/formResponse`;
+      function getReplySummaryData() {
+        const attendingValue = attendingField.value;
+        const isAttending = attendingValue === "欣然接受出席";
+
+        return {
+          name: document.getElementById("guest-name").value.trim(),
+          phone: document.getElementById("phone").value.trim(),
+          attending: attendingValue,
+          count: isAttending ? String(Number(guestCountInput.value)) : "-",
+          notes: document.getElementById("dietary-notes").value.trim() || "無"
+        };
       }
 
-      return "";
-    }
+      function toggleGuestCountVisibility() {
+        const isAttending = attendingField.value === "欣然接受出席";
 
-    function buildGoogleFormPayload() {
-      const payload = new URLSearchParams();
-      const { entries } = GOOGLE_FORM_CONFIG;
+        guestCountField.classList.toggle("hidden", !isAttending);
+        guestCountInput.required = isAttending;
 
-      payload.append(entries.guestName, document.getElementById("guest-name").value.trim());
-      payload.append(entries.phone, document.getElementById("phone").value.trim());
-      payload.append(entries.attending, attendingField.value);
-      payload.append(entries.guestCount, attendingField.value === "欣然接受出席" ? String(Number(guestCountInput.value)) : "");
-      payload.append(entries.dietaryNotes, document.getElementById("dietary-notes").value.trim() || "None");
-
-      return payload;
-    }
-
-    function initializeGoogleForm() {
-      if (!isGoogleFormConfigured()) {
-        submitButton.disabled = true;
-        showStatus("請先設定 Google 問卷 formUrl 與 entry 欄位後才能送出。", "#9f3f3b");
-        return;
+        if (!isAttending) {
+          guestCountInput.value = "1";
+        }
       }
 
-      submitButton.disabled = false;
-      showStatus("", "#66715a");
-    }
+      function showReplySummary(summary) {
+        const isAttending = summary.attending === "欣然接受出席";
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+        summaryThanks.textContent = isAttending
+          ? `${summary.name}，感謝您的回覆，我們婚禮當天見。`
+          : `${summary.name}，感謝您的回覆與祝福。`;
+        summaryName.textContent = summary.name || "-";
+        summaryPhone.textContent = summary.phone || "-";
+        summaryAttending.textContent = summary.attending || "-";
+        summaryCount.textContent = summary.count || "-";
+        summaryNotes.textContent = summary.notes || "無";
+        summaryCountLabel.classList.toggle("hidden", !isAttending);
+        summaryCount.classList.toggle("hidden", !isAttending);
+        replySummary.classList.remove("hidden");
 
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
+        if (formFields) {
+          formFields.classList.add("hidden");
+        }
+        submitButton.classList.add("hidden");
+        statusMessage.classList.add("hidden");
       }
 
-      if (!isGoogleFormConfigured()) {
-        showStatus("尚未完成 Google 問卷設定，暫時無法送出。", "#9f3f3b");
-        return;
+      function getGoogleFormEndpoint() {
+        const { formUrl } = GOOGLE_FORM_CONFIG;
+
+        const publicMatch = formUrl.match(/\/forms\/d\/e\/([^/]+)/);
+        if (publicMatch && publicMatch[1]) {
+          return `https://docs.google.com/forms/d/e/${publicMatch[1]}/formResponse`;
+        }
+
+        const editorMatch = formUrl.match(/\/forms\/d\/([^/]+)/);
+        if (editorMatch && editorMatch[1]) {
+          return `https://docs.google.com/forms/d/${editorMatch[1]}/formResponse`;
+        }
+
+        return "";
       }
 
-      submitButton.disabled = true;
-      showStatus("正在送出回覆…", "#66715a");
-      const replyData = getReplySummaryData();
+      function isGoogleFormConfigured() {
+        const { formUrl, entries } = GOOGLE_FORM_CONFIG;
+        if (!formUrl || typeof formUrl !== "string") return false;
+        if (!getGoogleFormEndpoint()) return false;
 
-      try {
-        await fetch(getGoogleFormEndpoint(), {
-          method: "POST",
-          mode: "no-cors",
-          body: buildGoogleFormPayload()
-        });
+        return [
+          entries.guestName,
+          entries.phone,
+          entries.attending,
+          entries.guestCount,
+          entries.dietaryNotes
+        ].every((entryId) => typeof entryId === "string" && entryId.startsWith("entry."));
+      }
 
-        showReplySummary(replyData);
-        form.reset();
-        guestCountInput.value = "1";
-        toggleGuestCountVisibility();
-        showStatus("謝謝您，您的回覆已成功送出。", "#426448");
-      } catch (_error) {
-        showStatus("暫時無法儲存回覆，請再試一次。", "#9f3f3b");
-      } finally {
+      function buildGoogleFormPayload() {
+        const payload = new URLSearchParams();
+        const { entries } = GOOGLE_FORM_CONFIG;
+
+        payload.append(entries.guestName, document.getElementById("guest-name").value.trim());
+        payload.append(entries.phone, document.getElementById("phone").value.trim());
+        payload.append(entries.attending, attendingField.value);
+        payload.append(entries.guestCount, attendingField.value === "欣然接受出席" ? String(Number(guestCountInput.value)) : "");
+        payload.append(entries.dietaryNotes, document.getElementById("dietary-notes").value.trim() || "None");
+
+        return payload;
+      }
+
+      function initializeGoogleForm() {
+        if (!isGoogleFormConfigured()) {
+          submitButton.disabled = true;
+          showStatus("請先設定 Google 問卷 formUrl 與 entry 欄位後才能送出。", "#9f3f3b");
+          return;
+        }
+
         submitButton.disabled = false;
+        showStatus("", "#66715a");
       }
-    });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        if (!isGoogleFormConfigured()) {
+          showStatus("尚未完成 Google 問卷設定，暫時無法送出。", "#9f3f3b");
+          return;
+        }
+
+        submitButton.disabled = true;
+        showStatus("正在送出回覆…", "#66715a");
+        const replyData = getReplySummaryData();
+
+        try {
+          await fetch(getGoogleFormEndpoint(), {
+            method: "POST",
+            mode: "no-cors",
+            body: buildGoogleFormPayload()
+          });
+
+          showReplySummary(replyData);
+          form.reset();
+          guestCountInput.value = "1";
+          toggleGuestCountVisibility();
+          showStatus("謝謝您，您的回覆已成功送出。", "#426448");
+        } catch (_error) {
+          showStatus("暫時無法儲存回覆，請再試一次。", "#9f3f3b");
+        } finally {
+          submitButton.disabled = false;
+        }
+      });
+
+      toggleGuestCountVisibility();
+      attendingField.addEventListener("change", toggleGuestCountVisibility);
+      initializeGoogleForm();
+    }
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
     startAutoplay();
-    toggleGuestCountVisibility();
-    attendingField.addEventListener("change", toggleGuestCountVisibility);
-    initializeGoogleForm();
+    updateAutoplayToggleUi();
+    updateMusicToggleUi();
+    initializeRsvpFormSection();
+    playBackgroundMusic();
     createIconsSafely();
   </script>
  

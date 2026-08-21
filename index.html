@@ -1280,6 +1280,8 @@ cursor: default;
     let resumeTimer;
     let musicEnabled = true;
     let autoplayUnlockBound = false;
+    let musicAutoplayUnlockHandler = null;
+    const musicAutoplayUnlockEvents = ["pointerdown", "keydown", "touchstart"];
 
     function updateGallery(index) {
       activeSlide = (index + slides.length) % slides.length;
@@ -1339,26 +1341,44 @@ cursor: default;
       createIconsSafely();
     }
 
+    function removeMusicAutoplayUnlock() {
+      if (!autoplayUnlockBound || !musicAutoplayUnlockHandler) return;
+
+      musicAutoplayUnlockEvents.forEach((eventName) => {
+        document.removeEventListener(eventName, musicAutoplayUnlockHandler);
+      });
+
+      autoplayUnlockBound = false;
+      musicAutoplayUnlockHandler = null;
+    }
+
     function bindMusicAutoplayUnlock() {
       if (autoplayUnlockBound) return;
-      autoplayUnlockBound = true;
 
       const unlockAudio = async () => {
+        if (!musicEnabled) {
+          removeMusicAutoplayUnlock();
+          return;
+        }
+
         const didStart = await playBackgroundMusic();
         if (didStart) {
-          ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
-            document.removeEventListener(eventName, unlockAudio);
-          });
+          removeMusicAutoplayUnlock();
         }
       };
 
-      ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+      musicAutoplayUnlockHandler = unlockAudio;
+      autoplayUnlockBound = true;
+
+      musicAutoplayUnlockEvents.forEach((eventName) => {
         document.addEventListener(eventName, unlockAudio, { passive: true });
       });
     }
 
     async function playBackgroundMusic() {
       if (!backgroundAudio) return false;
+
+      updateMusicToggleUi();
 
       if (backgroundAudio.networkState === HTMLMediaElement.NETWORK_NO_SOURCE && backgroundAudio.dataset.fallbackApplied !== "true") {
         backgroundAudio.dataset.fallbackApplied = "true";
@@ -1368,13 +1388,14 @@ cursor: default;
 
       try {
         await backgroundAudio.play();
-        musicEnabled = true;
+        removeMusicAutoplayUnlock();
         updateMusicToggleUi();
         return true;
       } catch (_error) {
-        musicEnabled = false;
         updateMusicToggleUi();
-        bindMusicAutoplayUnlock();
+        if (musicEnabled) {
+          bindMusicAutoplayUnlock();
+        }
         return false;
       }
     }
@@ -1382,8 +1403,9 @@ cursor: default;
     function pauseBackgroundMusic() {
       if (!backgroundAudio) return;
 
-      backgroundAudio.pause();
       musicEnabled = false;
+      removeMusicAutoplayUnlock();
+      backgroundAudio.pause();
       updateMusicToggleUi();
     }
 
@@ -1566,11 +1588,10 @@ cursor: default;
         playBackgroundMusic();
       });
       backgroundAudio.addEventListener("play", () => {
-        musicEnabled = true;
+        removeMusicAutoplayUnlock();
         updateMusicToggleUi();
       });
       backgroundAudio.addEventListener("pause", () => {
-        musicEnabled = false;
         updateMusicToggleUi();
       });
     }
@@ -1604,6 +1625,7 @@ cursor: default;
         return;
       }
 
+      musicEnabled = true;
       await playBackgroundMusic();
     });
 

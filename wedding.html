@@ -1241,68 +1241,45 @@
       position: relative;
     }
 
-.photo-modal-portal{
-position:fixed;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(19,25,21,.88);
-overflow:hidden;
-padding:1rem;
-z-index:30;
-cursor: zoom-out;
-}
-
-.photo-modal-stage{
-display:flex;
-align-items:center;
-justify-content:center;
-width:100%;
-height:100%;
-}
-
-.photo-modal-image{
-display:block;
-max-width:100%;
-max-height:100%;
-width:auto;
-height:auto;
-object-fit:contain;
-cursor: default;
-}
-
-.photo-modal-portal.is-open .photo-modal-image {
-  transform: none;
-}
-
-    .photo-modal-close {
-      position: absolute;
-      top: max(1rem, env(safe-area-inset-top));
-      right: max(1rem, env(safe-area-inset-right));
-      z-index: 2;
-      display: inline-flex;
+    .photo-modal-portal {
+      position: fixed;
+      inset: 0;
+      display: flex;
       align-items: center;
       justify-content: center;
-      width: 2.75rem;
-      height: 2.75rem;
-      border: 0;
-      border-radius: 999px;
-      color: #28352d;
-      background: rgba(255,255,255,.95);
-      box-shadow: 0 8px 26px rgba(0,0,0,.24);
-      touch-action: manipulation;
+      background: rgba(19,25,21,.88);
+      overflow: hidden;
+      padding: 1rem;
+      z-index: 30;
+      cursor: zoom-out;
     }
 
-@media (max-width: 767px) {
-  .photo-modal-stage {
-      padding:.75rem;
-  }
+    .photo-modal-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
 
-  .photo-modal-image {
-      max-width:100%;
-      max-height:100%;
-  }
-}
+    .photo-modal-image {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      transition: transform .14s ease-out;
+      transform-origin: center center;
+    }
+
+    .photo-modal-portal.is-open .photo-modal-image {
+      transform: none;
+    }
   </style>
  </head>
  <body data-template-id="__page-root" class="w-full min-h-screen">
@@ -1561,9 +1538,12 @@ cursor: default;
 
     let modalPortal = null;
     let modalImage = null;
-    let modalClose = null;
     let modalHost = null;
     let modalScrollY = 0;
+    let photoModalScale = 1;
+    let pinchStartDistance = 0;
+    let pinchStartScale = 1;
+    let suppressModalClickClose = false;
 
     function findPhotoModalHost(image) {
       return image.closest(".hero-image-wrap") ||
@@ -1685,6 +1665,11 @@ cursor: default;
       modalHost = findPhotoModalHost(image);
       if (!modalHost) return;
 
+      photoModalScale = 1;
+      pinchStartDistance = 0;
+      pinchStartScale = 1;
+      suppressModalClickClose = false;
+
       modalHost.classList.add("photo-modal-host");
       modalPortal = document.createElement("div");
       modalPortal.className = "photo-modal-portal";
@@ -1698,22 +1683,14 @@ cursor: default;
 
       modalImage = document.createElement("img");
       modalImage.className = "photo-modal-image";
+      modalImage.style.transform = "scale(1)";
 
       modalImage.src = image.currentSrc || image.src;
       modalImage.alt = image.alt || "放大查看照片";
 
-      modalClose = document.createElement("button");
-      modalClose.type = "button";
-      modalClose.className = "photo-modal-close";
-      modalClose.setAttribute("aria-label", "關閉放大照片");
-
-      modalClose.innerHTML =
-        '<i data-lucide="x" aria-hidden="true"></i>';
-
       stage.appendChild(modalImage);
 
       modalPortal.appendChild(stage);
-      modalPortal.appendChild(modalClose);
 
       document.body.appendChild(modalPortal);
       syncPhotoModalViewport();
@@ -1725,38 +1702,59 @@ cursor: default;
         }
       });
 
-      createIconsSafely();
-
-      modalClose.addEventListener(
-        "click",
-        closePhotoModal
-      );
-
-      modalPortal.addEventListener("click", e => {
-
-        if (e.target === modalPortal) {
-
-          closePhotoModal();
-
+      const closeOnSingleTap = (event) => {
+        if (suppressModalClickClose) {
+          suppressModalClickClose = false;
+          return;
         }
+        if (photoModalScale > 1.04) return;
+        if (event.target === modalPortal || event.target === stage || event.target === modalImage) {
+          closePhotoModal();
+        }
+      };
 
-      });
+      modalPortal.addEventListener("click", closeOnSingleTap);
 
-      modalPortal.addEventListener(
-        "touchmove",
-        e => e.preventDefault(),
-        { passive: false }
-      );
+      const getTouchDistance = (touches) => {
+        if (touches.length < 2) return 0;
+        const [first, second] = touches;
+        const dx = first.clientX - second.clientX;
+        const dy = first.clientY - second.clientY;
+        return Math.hypot(dx, dy);
+      };
+
+      modalPortal.addEventListener("touchstart", (event) => {
+        if (event.touches.length === 2) {
+          suppressModalClickClose = true;
+          pinchStartDistance = getTouchDistance(event.touches);
+          pinchStartScale = photoModalScale;
+        }
+      }, { passive: true });
+
+      modalPortal.addEventListener("touchmove", (event) => {
+        if (event.touches.length === 2 && pinchStartDistance > 0 && modalImage) {
+          suppressModalClickClose = true;
+          event.preventDefault();
+          const currentDistance = getTouchDistance(event.touches);
+          const nextScale = Math.min(Math.max(pinchStartScale * (currentDistance / pinchStartDistance), 1), 2.8);
+          photoModalScale = nextScale;
+          modalImage.style.transform = `scale(${nextScale})`;
+        }
+      }, { passive: false });
+
+      modalPortal.addEventListener("touchend", () => {
+        if (pinchStartDistance > 0) {
+          suppressModalClickClose = true;
+        }
+        pinchStartDistance = 0;
+        pinchStartScale = photoModalScale;
+      }, { passive: true });
 
       modalPortal.addEventListener(
         "wheel",
         e => e.preventDefault(),
         { passive: false }
       );
-
-      modalClose.focus({
-        preventScroll: true
-      });
     }
 
     function openPhotoModal(image, event) {
@@ -1776,7 +1774,10 @@ cursor: default;
       const portalToRemove = modalPortal;
       modalPortal = null;
       modalImage = null;
-      modalClose = null;
+      photoModalScale = 1;
+      pinchStartDistance = 0;
+      pinchStartScale = 1;
+      suppressModalClickClose = false;
 
       portalToRemove.remove();
       if (modalHost && !modalHost.querySelector(".photo-modal-portal")) {

@@ -866,9 +866,13 @@
     }
 
     .details-section .canva-card {
-      background: #fffdf9;
-      border-color: #cfc6b7;
-      box-shadow: 0 12px 32px rgba(37, 47, 39, .1);
+      background:
+        radial-gradient(circle at 50% 16%, rgba(255,255,255,.78) 0 14%, rgba(255,255,255,0) 56%),
+        linear-gradient(180deg, rgba(255,251,244,.98), rgba(251,245,234,.98));
+      border: 1px solid #d8ccb8;
+      box-shadow:
+        0 18px 34px rgba(53, 61, 52, .09),
+        inset 0 0 0 1px rgba(255,255,255,.78);
     }
 
     .details-section .canva-card .canva-text {
@@ -877,79 +881,123 @@
     }
 
     .details-section .canva-card h3.canva-text {
-      color: #243329 !important;
+      color: #2e3d34 !important;
     }
 
     .details-section article[data-template-id$="-card"] {
       position: relative;
       overflow: hidden;
-      border: 1px solid #ccbfa9;
-      border-radius: 2px;
-      background: linear-gradient(145deg, rgba(255,255,255,.97), rgba(251,247,239,.94));
-      box-shadow:
-        0 14px 30px rgba(53, 61, 52, .1),
-        inset 0 0 0 1px rgba(255,255,255,.8);
+      border-radius: 0;
+      padding: 2.6rem 4.8rem;
+      min-height: 18rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      background-image:
+        linear-gradient(180deg, rgba(255,255,255,.42), rgba(255,255,255,0)),
+        radial-gradient(circle at 50% 50%, rgba(201,179,140,.08) 0 1px, transparent 1px);
+      background-size: auto, 7px 7px;
+      background-position: center, center;
     }
 
-    .details-section article[data-template-id$="-card"]::before {
-      content: "";
-      position: absolute;
-      inset: 12px;
-      border: 1px solid rgba(198,177,146,.58);
-      border-radius: 12px;
-      pointer-events: none;
-    }
-
+    .details-section article[data-template-id$="-card"]::before,
     .details-section article[data-template-id$="-card"]::after {
       content: "";
       position: absolute;
-      inset: 18px;
-      background:
-        radial-gradient(circle at 0 0, rgba(202,175,131,.4) 0 3px, transparent 4px),
-        radial-gradient(circle at 100% 0, rgba(202,175,131,.4) 0 3px, transparent 4px),
-        radial-gradient(circle at 0 100%, rgba(202,175,131,.4) 0 3px, transparent 4px),
-        radial-gradient(circle at 100% 100%, rgba(202,175,131,.4) 0 3px, transparent 4px);
-      background-repeat: no-repeat;
+      top: 0;
+      bottom: 0;
+      width: 4.2rem;
       pointer-events: none;
-      opacity: .9;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.32), rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, rgba(255,255,255,.22)),
+        repeating-linear-gradient(45deg, rgba(190, 212, 232, .46) 0 2px, transparent 2px 10px),
+        repeating-linear-gradient(-45deg, rgba(190, 212, 232, .46) 0 2px, transparent 2px 10px),
+        linear-gradient(180deg, rgba(224,237,248,.92), rgba(244,248,252,.84));
+      box-shadow:
+        inset 0 0 0 1px rgba(203, 219, 232, .88),
+        inset 10px 0 0 rgba(255,255,255,.72),
+        inset -10px 0 0 rgba(255,255,255,.72);
+    }
+
+    .details-section article[data-template-id$="-card"]::before {
+      left: 0;
+      border-right: 1px dashed rgba(182, 195, 208, .92);
+    }
+
+    .details-section article[data-template-id$="-card"]::after {
+      right: 0;
+      border-left: 1px dashed rgba(182, 195, 208, .92);
     }
 
     .details-section .canva-card p.canva-text {
-      color: #415145 !important;
+      color: #4a554d !important;
       font-weight: 500 !important;
     }
 
     .details-section .venue-frame {
-      display: inline-block;
-      margin-top: .62rem;
-      padding: .34rem .95rem;
-      border: 1px solid #ccbba0;
-      border-radius: 999px;
-      color: #7d5f3d;
-      font-size: .92em;
-      letter-spacing: .12em;
-      background:
-        radial-gradient(circle at 12% 22%, rgba(255,255,255,.72) 0 18%, rgba(255,255,255,0) 46%),
-        linear-gradient(135deg, rgba(252,246,234,.98), rgba(244,232,209,.92));
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.78),
-        0 6px 14px rgba(117,89,56,.12);
-      position: relative;
+      display: block;
+      margin-top: .6rem;
+      color: #6e756e;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: .04em;
     }
 
     .details-section .venue-frame::before,
     .details-section .venue-frame::after {
-      content: "✦";
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #c7a982;
-      font-size: .64rem;
+      content: none;
+    }
+
+    .details-section .details-grid {
+      max-width: 58rem;
+      margin: 0 auto;
+    }
+
+    .details-section .details-card-title {
+      line-height: 1.18;
+    }
+
+    .details-section .details-card-title span {
+      display: block;
+    }
+
+    .details-section .details-card-title span + span {
+      margin-top: .38rem;
+      font-size: .92em;
+      font-weight: 400;
       letter-spacing: 0;
     }
 
-    .details-section .venue-frame::before { left: .42rem; }
-    .details-section .venue-frame::after { right: .42rem; }
+    @media (max-width: 767px) {
+      .details-section article[data-template-id$="-card"] {
+        min-height: auto;
+        padding: 2.25rem 2.35rem;
+      }
+
+      .details-section article[data-template-id$="-card"]::before,
+      .details-section article[data-template-id$="-card"]::after {
+        width: 2rem;
+      }
+
+      .details-section .details-card-title {
+        font-size: 2rem !important;
+      }
+
+      .details-section .details-card-title span {
+        white-space: nowrap;
+      }
+
+      .details-section .canva-card p.canva-text {
+        font-size: 1.02rem !important;
+        line-height: 1.65 !important;
+      }
+
+      .details-section .venue-frame {
+        margin-top: .42rem;
+        font-size: .98rem;
+      }
+    }
 
     .details-section .reveal,
     .details-section .reveal:nth-child(2),
@@ -1139,19 +1187,15 @@ cursor: default;
       <p data-template-id="details-kicker" class="canva-text mb-3 font-semibold uppercase tracking-[.25em]" style="color: rgb(184, 111, 104); font-weight: 600; font-style: normal; font-size: 21px;">婚禮資訊</p>
       <h2 data-template-id="details-heading" class="canva-text editorial-title font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 24px;">A little guide to our celebration</h2>
      </div>
-     <div class="grid gap-4 md:grid-cols-3">
-      <article data-template-id="ceremony-card" class="canva-card reveal border border-[#ddd6c7] p-7 text-center"><i data-lucide="heart" class="mx-auto mb-5 h-5 w-5 text-[#b86f68]"></i>
-      <h3 data-template-id="ceremony-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">文定 Engagement</h3>
-      <p data-template-id="ceremony-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">上午 10:00 訂婚儀式<br><span class="venue-frame">香榭廳</span></p>
-      </article>
-      <article data-template-id="reception-card" class="canva-card reveal border border-[#ddd6c7] p-7 text-center"><i data-lucide="wine" class="mx-auto mb-5 h-5 w-5 text-[#b86f68]"></i>
-      <h3 data-template-id="reception-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">證婚儀式 Ceremony</h3>
-      <p data-template-id="reception-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">上午 11:00 婚禮儀式<br><span class="venue-frame">星河池畔</span></p>
-      </article>
-      <article data-template-id="attire-card" class="canva-card reveal border border-[#ddd6c7] p-7 text-center"><i data-lucide="sparkles" class="mx-auto mb-5 h-5 w-5 text-[#b86f68]"></i>
-      <h3 data-template-id="attire-title" class="canva-text editorial-title mb-3 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;">喜宴 Reception</h3>
-      <p data-template-id="attire-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">中午 12:00 喜宴<br><span class="venue-frame">星河池畔</span></p>
-      </article>
+    <div class="details-grid grid gap-6 md:grid-cols-2">
+     <article data-template-id="reception-card" class="canva-card reveal"><i data-lucide="wine" class="mx-auto mb-5 h-5 w-5 text-[#b86f68]"></i>
+     <h3 data-template-id="reception-title" class="details-card-title canva-text editorial-title mb-4 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;"><span>證婚儀式</span><span>Ceremony</span></h3>
+     <p data-template-id="reception-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">上午 11:00 婚禮儀式<span class="venue-frame">星河池畔</span></p>
+     </article>
+     <article data-template-id="attire-card" class="canva-card reveal"><i data-lucide="sparkles" class="mx-auto mb-5 h-5 w-5 text-[#b86f68]"></i>
+     <h3 data-template-id="attire-title" class="details-card-title canva-text editorial-title mb-4 font-medium" style="color: rgb(40, 53, 45); font-weight: 500; font-style: normal; font-size: 22px;"><span>喜宴</span><span>Reception</span></h3>
+     <p data-template-id="attire-detail" class="canva-text leading-6" style="color: rgb(93, 102, 94); font-weight: 400; font-style: normal; font-size: 19px;">中午 12:00 喜宴<span class="venue-frame">星河池畔</span></p>
+     </article>
      </div>
     </div>
    </section>

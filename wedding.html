@@ -985,7 +985,9 @@
 
     .gallery-thumb-strip {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(4.5rem, 1fr);
       gap: .5rem;
     }
 
@@ -1473,9 +1475,9 @@
       <div id="music-autoplay-notice" aria-hidden="true" class="pointer-events-none fixed bottom-5 left-1/2 z-40 hidden -translate-x-1/2 rounded-full border border-[#d6cfc1] bg-[#fffdf9]/95 px-4 py-2 text-sm font-semibold text-[#55604f] shadow-[0_12px_30px_rgba(37,47,39,.16)] backdrop-blur-sm">
        點一下任意位置即可開啟背景音樂
       </div>
-      <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div class="mt-4 flex flex-col gap-4">
       <div class="gallery-thumb-strip flex-1"><button type="button" class="gallery-thumb is-active overflow-hidden rounded-sm" aria-label="查看第 1 張照片" aria-pressed="true"> <img data-template-id="gallery-thumb-1" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/求婚.png" alt="求婚.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 2 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-2" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/彈鋼琴.png" alt="彈鋼琴.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 3 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-3" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/地中海.PNG" alt="地中海.PNG"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 4 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-4" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/Ｎ過馬路.png" alt="Ｎ過馬路.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 5 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-5" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/戶外夕陽.png" alt="戶外夕陽.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 6 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-6" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2247-2.png" alt="WANG2247-2.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 7 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-7" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2274.jpg" alt="WANG2274.jpg"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 8 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-8" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2280.jpg" alt="WANG2280.jpg"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 9 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-9" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2286.jpg" alt="WANG2286.jpg"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 10 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-10" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2297.jpg" alt="WANG2297.jpg"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 11 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-11" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2331.jpg" alt="WANG2331.jpg"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 12 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-12" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2438-1.png" alt="WANG2438-1.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 13 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-13" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2445-2.png" alt="WANG2445-2.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 14 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-14" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2455-3.png" alt="WANG2455-3.png"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 15 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-15" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/IMG_1239.PNG" alt="IMG_1239.PNG"> </button> <button type="button" class="gallery-thumb overflow-hidden rounded-sm" aria-label="查看第 16 張照片" aria-pressed="false"> <img data-template-id="gallery-thumb-16" loading="lazy" class="canva-image aspect-square h-full w-full object-cover" src="pics/WANG2459-2.png" alt="WANG2459-2.png"> </button>
-       </div><button data-template-id="gallery-pause-button" id="gallery-toggle" type="button" class="canva-button inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-sm border border-[#d6cfc1] px-3 py-2 text-xs font-semibold transition hover:bg-white sm:w-auto" aria-pressed="false" style="background: rgb(248, 245, 238); color: rgb(85, 96, 79); font-weight: 600;"> <i id="toggle-icon" data-lucide="pause" class="h-3.5 w-3.5"></i> <span data-template-id="gallery-pause-label" class="canva-text" style="color: rgb(85, 96, 79); font-weight: 600; font-style: normal; font-size: 16px;">暫停播放</span> </button>
+       </div><button data-template-id="gallery-pause-button" id="gallery-toggle" type="button" class="canva-button inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-sm border border-[#d6cfc1] px-3 py-2 text-xs font-semibold transition hover:bg-white sm:w-auto sm:self-center" aria-pressed="false" style="background: rgb(248, 245, 238); color: rgb(85, 96, 79); font-weight: 600;"> <i id="toggle-icon" data-lucide="pause" class="h-3.5 w-3.5"></i> <span data-template-id="gallery-pause-label" class="canva-text" style="color: rgb(85, 96, 79); font-weight: 600; font-style: normal; font-size: 16px;">暫停播放</span> </button>
       </div>
      </div>
     </div>
@@ -2174,6 +2176,33 @@
       musicEnabled = true;
       await playBackgroundMusic();
     });
+
+    let musicAutoPausedByVisibility = false;
+
+    function pauseMusicForBackgroundVisibility() {
+      if (!backgroundAudio || backgroundAudio.paused) return;
+      musicAutoPausedByVisibility = true;
+      backgroundAudio.pause();
+    }
+
+    async function resumeMusicFromBackgroundVisibility() {
+      if (!musicAutoPausedByVisibility) return;
+      musicAutoPausedByVisibility = false;
+      if (musicEnabled) {
+        await playBackgroundMusic();
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        pauseMusicForBackgroundVisibility();
+      } else {
+        resumeMusicFromBackgroundVisibility();
+      }
+    });
+
+    window.addEventListener("blur", pauseMusicForBackgroundVisibility);
+    window.addEventListener("focus", resumeMusicFromBackgroundVisibility);
 
     gallery.addEventListener("keydown", (event) => {
       if (event.key === "ArrowLeft") {

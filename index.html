@@ -1317,7 +1317,6 @@
 
     .photo-modal-stage-list .photo-modal-image {
       max-height: 46vh;
-      touch-action: auto;
     }
   </style>
  </head>
@@ -1600,34 +1599,8 @@
     }
 
     let modalPortal = null;
-    let modalImage = null;
     let modalHost = null;
     let modalScrollY = 0;
-    let photoModalScale = 1;
-    let pinchStartDistance = 0;
-    let pinchStartScale = 1;
-    let suppressModalClickClose = false;
-    let dragOffsetX = 0;
-    let dragOffsetY = 0;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let dragTouchStartX = 0;
-    let dragTouchStartY = 0;
-    let dragTouchActive = false;
-    let dragInProgress = false;
-    let lastModalTapAt = 0;
-    let ignoreModalTapUntil = 0;
-
-    const clampPhotoModalScale = (value) => {
-      return Math.min(Math.max(value, 1), 2.4);
-    };
-
-    const clampPhotoModalDrag = () => {
-      const maxX = Math.max(0, (photoModalScale - 1) * 140);
-      const maxY = Math.max(0, (photoModalScale - 1) * 180);
-      dragOffsetX = Math.min(maxX, Math.max(-maxX, dragOffsetX));
-      dragOffsetY = Math.min(maxY, Math.max(-maxY, dragOffsetY));
-    };
 
     function findPhotoModalHost(image) {
       return image.closest(".hero-image-wrap") ||
@@ -1744,25 +1717,182 @@
       updateMusicToggleUi();
     }
 
+    // Per-image pinch-zoom, double-tap-to-reset, and tap-to-close controller (mobile-first).
+    function bindPhotoZoomInteractions(imageEl, requestClose) {
+      let scale = 1;
+      let pinchStartDistance = 0;
+      let pinchStartScale = 1;
+      let suppressClickClose = false;
+      let dragOffsetX = 0;
+      let dragOffsetY = 0;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let dragTouchStartX = 0;
+      let dragTouchStartY = 0;
+      let dragTouchActive = false;
+      let dragInProgress = false;
+      let lastTapAt = 0;
+      let ignoreTapUntil = 0;
+
+      const clampScale = (value) => Math.min(Math.max(value, 1), 2.4);
+
+      const clampDrag = () => {
+        const maxX = Math.max(0, (scale - 1) * 140);
+        const maxY = Math.max(0, (scale - 1) * 180);
+        dragOffsetX = Math.min(maxX, Math.max(-maxX, dragOffsetX));
+        dragOffsetY = Math.min(maxY, Math.max(-maxY, dragOffsetY));
+      };
+
+      const applyTransform = () => {
+        scale = clampScale(scale);
+        clampDrag();
+        imageEl.style.touchAction = scale > 1.04 ? "none" : "pan-y";
+        imageEl.style.transform = `translate3d(${dragOffsetX}px, ${dragOffsetY}px, 0) scale(${scale})`;
+      };
+
+      const resetToOriginal = () => {
+        scale = 1;
+        dragOffsetX = 0;
+        dragOffsetY = 0;
+        pinchStartDistance = 0;
+        pinchStartScale = 1;
+        dragInProgress = false;
+        imageEl.style.transition = "transform 0.08s ease-out";
+        applyTransform();
+      };
+
+      const getTouchDistance = (touches) => {
+        if (touches.length < 2) return 0;
+        const [first, second] = touches;
+        const dx = first.clientX - second.clientX;
+        const dy = first.clientY - second.clientY;
+        return Math.hypot(dx, dy);
+      };
+
+      imageEl.style.transform = "translate3d(0px, 0px, 0) scale(1)";
+      imageEl.style.willChange = "transform";
+      imageEl.style.transition = "transform 0.08s ease-out";
+      imageEl.style.backfaceVisibility = "hidden";
+      imageEl.style.webkitBackfaceVisibility = "hidden";
+      imageEl.style.touchAction = "pan-y";
+
+      imageEl.addEventListener("touchstart", (event) => {
+        const touch = event.touches[0];
+        if (event.touches.length === 2) {
+          dragTouchActive = false;
+          dragInProgress = false;
+          imageEl.style.transition = "none";
+          imageEl.style.touchAction = "none";
+          suppressClickClose = true;
+          pinchStartDistance = getTouchDistance(event.touches);
+          pinchStartScale = scale;
+          return;
+        }
+
+        if (scale > 1.04 && touch) {
+          dragTouchActive = true;
+          dragInProgress = false;
+          imageEl.style.transition = "none";
+          dragTouchStartX = touch.clientX;
+          dragTouchStartY = touch.clientY;
+          dragStartX = touch.clientX - dragOffsetX;
+          dragStartY = touch.clientY - dragOffsetY;
+        }
+      }, { passive: true });
+
+      imageEl.addEventListener("touchmove", (event) => {
+        if (event.touches.length === 2 && pinchStartDistance > 0) {
+          suppressClickClose = true;
+          event.preventDefault();
+          const currentDistance = getTouchDistance(event.touches);
+          const rawScale = pinchStartScale * (currentDistance / pinchStartDistance) * 0.92;
+          scale = clampScale(rawScale);
+          applyTransform();
+          return;
+        }
+
+        if (dragTouchActive && event.touches.length === 1) {
+          event.preventDefault();
+          const touch = event.touches[0];
+          const moveX = touch.clientX - dragTouchStartX;
+          const moveY = touch.clientY - dragTouchStartY;
+          if (!dragInProgress && Math.hypot(moveX, moveY) > 8) {
+            dragInProgress = true;
+            suppressClickClose = true;
+          }
+          if (!dragInProgress) {
+            return;
+          }
+          dragOffsetX = touch.clientX - dragStartX;
+          dragOffsetY = touch.clientY - dragStartY;
+          applyTransform();
+        }
+      }, { passive: false });
+
+      imageEl.addEventListener("touchend", (event) => {
+        const now = Date.now();
+        const pinchJustEnded = pinchStartDistance > 0;
+
+        if (pinchJustEnded) {
+          ignoreTapUntil = now + 250;
+          lastTapAt = 0;
+          dragTouchActive = false;
+          suppressClickClose = true;
+          dragInProgress = false;
+          pinchStartDistance = 0;
+          pinchStartScale = scale;
+          imageEl.style.transition = "transform 0.08s ease-out";
+          imageEl.style.touchAction = scale > 1.04 ? "none" : "pan-y";
+          return;
+        }
+
+        const wasDragging = dragInProgress;
+        const isDoubleTap = !wasDragging && event.changedTouches.length === 1 && scale > 1.02 && now - lastTapAt < 280;
+        dragTouchActive = false;
+
+        if (isDoubleTap) {
+          ignoreTapUntil = now + 250;
+          suppressClickClose = true;
+          lastTapAt = 0;
+          resetToOriginal();
+          return;
+        }
+
+        if (wasDragging) {
+          ignoreTapUntil = now + 180;
+          suppressClickClose = true;
+        }
+        dragInProgress = false;
+        lastTapAt = wasDragging ? 0 : now;
+        pinchStartDistance = 0;
+        pinchStartScale = scale;
+        imageEl.style.transition = "transform 0.08s ease-out";
+      }, { passive: true });
+
+      imageEl.addEventListener("touchcancel", () => {
+        dragTouchActive = false;
+        dragInProgress = false;
+        ignoreTapUntil = 0;
+        lastTapAt = 0;
+        pinchStartDistance = 0;
+        pinchStartScale = scale;
+      }, { passive: true });
+
+      imageEl.addEventListener("click", () => {
+        if (Date.now() < ignoreTapUntil) return;
+        if (suppressClickClose) {
+          suppressClickClose = false;
+          return;
+        }
+        if (scale > 1.04) return;
+        requestClose();
+      });
+    }
+
     function createPhotoModal(image) {
       modalScrollY = window.scrollY;
       modalHost = findPhotoModalHost(image);
       if (!modalHost) return;
-
-      photoModalScale = 1;
-      pinchStartDistance = 0;
-      pinchStartScale = 1;
-      suppressModalClickClose = false;
-      dragOffsetX = 0;
-      dragOffsetY = 0;
-      dragStartX = 0;
-      dragStartY = 0;
-      dragTouchStartX = 0;
-      dragTouchStartY = 0;
-      dragTouchActive = false;
-      dragInProgress = false;
-      lastModalTapAt = 0;
-      ignoreModalTapUntil = 0;
 
       modalHost.classList.add("photo-modal-host");
       modalPortal = document.createElement("div");
@@ -1775,19 +1905,13 @@
       const stage = document.createElement("div");
       stage.className = "photo-modal-stage";
 
-      modalImage = document.createElement("img");
+      const modalImage = document.createElement("img");
       modalImage.className = "photo-modal-image";
-      modalImage.style.transform = "translate3d(0px, 0px, 0) scale(1)";
-      modalImage.style.willChange = "transform";
-      modalImage.style.transition = "transform 0.08s ease-out";
-      modalImage.style.backfaceVisibility = "hidden";
-      modalImage.style.webkitBackfaceVisibility = "hidden";
-
       modalImage.src = image.currentSrc || image.src;
       modalImage.alt = image.alt || "放大查看照片";
+      bindPhotoZoomInteractions(modalImage, closePhotoModal);
 
       stage.appendChild(modalImage);
-
       modalPortal.appendChild(stage);
 
       document.body.appendChild(modalPortal);
@@ -1800,151 +1924,15 @@
         }
       });
 
-      const closeOnSingleTap = (event) => {
-        if (Date.now() < ignoreModalTapUntil) {
-          return;
-        }
-        if (suppressModalClickClose) {
-          suppressModalClickClose = false;
-          return;
-        }
-        if (photoModalScale > 1.04) return;
-        if (event.target === modalPortal || event.target === stage || event.target === modalImage) {
+      modalPortal.addEventListener("click", (event) => {
+        if (event.target === modalPortal || event.target === stage) {
           closePhotoModal();
         }
-      };
-
-      modalPortal.addEventListener("click", closeOnSingleTap);
-
-      const getTouchDistance = (touches) => {
-        if (touches.length < 2) return 0;
-        const [first, second] = touches;
-        const dx = first.clientX - second.clientX;
-        const dy = first.clientY - second.clientY;
-        return Math.hypot(dx, dy);
-      };
-
-      const applyPhotoModalTransform = () => {
-        if (!modalImage) return;
-        photoModalScale = clampPhotoModalScale(photoModalScale);
-        clampPhotoModalDrag();
-        modalImage.style.transform = `translate3d(${dragOffsetX}px, ${dragOffsetY}px, 0) scale(${photoModalScale})`;
-      };
-
-      const resetPhotoModalToOriginal = () => {
-        photoModalScale = 1;
-        dragOffsetX = 0;
-        dragOffsetY = 0;
-        pinchStartDistance = 0;
-        pinchStartScale = 1;
-        dragInProgress = false;
-        modalImage.style.transition = "transform 0.08s ease-out";
-        applyPhotoModalTransform();
-      };
-
-      modalPortal.addEventListener("touchstart", (event) => {
-        const touch = event.touches[0];
-        if (event.touches.length === 2) {
-          dragTouchActive = false;
-          dragInProgress = false;
-          modalImage.style.transition = "none";
-          suppressModalClickClose = true;
-          pinchStartDistance = getTouchDistance(event.touches);
-          pinchStartScale = photoModalScale;
-          return;
-        }
-
-        if (photoModalScale > 1.04 && touch) {
-          dragTouchActive = true;
-          dragInProgress = false;
-          modalImage.style.transition = "none";
-          dragTouchStartX = touch.clientX;
-          dragTouchStartY = touch.clientY;
-          dragStartX = touch.clientX - dragOffsetX;
-          dragStartY = touch.clientY - dragOffsetY;
-        }
-      }, { passive: true });
-
-      modalPortal.addEventListener("touchmove", (event) => {
-        if (event.touches.length === 2 && pinchStartDistance > 0 && modalImage) {
-          suppressModalClickClose = true;
-          event.preventDefault();
-          const currentDistance = getTouchDistance(event.touches);
-          const rawScale = pinchStartScale * (currentDistance / pinchStartDistance) * 0.92;
-          photoModalScale = clampPhotoModalScale(rawScale);
-          applyPhotoModalTransform();
-          return;
-        }
-
-        if (dragTouchActive && event.touches.length === 1 && modalImage) {
-          event.preventDefault();
-          const touch = event.touches[0];
-          const moveX = touch.clientX - dragTouchStartX;
-          const moveY = touch.clientY - dragTouchStartY;
-          if (!dragInProgress && Math.hypot(moveX, moveY) > 8) {
-            dragInProgress = true;
-            suppressModalClickClose = true;
-          }
-          if (!dragInProgress) {
-            return;
-          }
-          dragOffsetX = touch.clientX - dragStartX;
-          dragOffsetY = touch.clientY - dragStartY;
-          applyPhotoModalTransform();
-        }
-      }, { passive: false });
-
-      modalPortal.addEventListener("touchend", (event) => {
-        const now = Date.now();
-        const pinchJustEnded = pinchStartDistance > 0;
-
-        if (pinchJustEnded) {
-          ignoreModalTapUntil = now + 250;
-          lastModalTapAt = 0;
-          dragTouchActive = false;
-          suppressModalClickClose = true;
-          dragInProgress = false;
-          pinchStartDistance = 0;
-          pinchStartScale = photoModalScale;
-          modalImage.style.transition = "transform 0.08s ease-out";
-          return;
-        }
-
-        const wasDragging = dragInProgress;
-        const isDoubleTap = !wasDragging && event.changedTouches.length === 1 && photoModalScale > 1.02 && now - lastModalTapAt < 280;
-        dragTouchActive = false;
-
-        if (isDoubleTap) {
-          ignoreModalTapUntil = now + 250;
-          suppressModalClickClose = true;
-          lastModalTapAt = 0;
-          resetPhotoModalToOriginal();
-          return;
-        }
-
-        if (wasDragging) {
-          ignoreModalTapUntil = now + 180;
-          suppressModalClickClose = true;
-        }
-        dragInProgress = false;
-        lastModalTapAt = wasDragging ? 0 : now;
-        pinchStartDistance = 0;
-        pinchStartScale = photoModalScale;
-        modalImage.style.transition = "transform 0.08s ease-out";
-      }, { passive: true });
-
-      modalPortal.addEventListener("touchcancel", () => {
-        dragTouchActive = false;
-        dragInProgress = false;
-        ignoreModalTapUntil = 0;
-        lastModalTapAt = 0;
-        pinchStartDistance = 0;
-        pinchStartScale = photoModalScale;
-      }, { passive: true });
+      });
 
       modalPortal.addEventListener(
         "wheel",
-        e => e.preventDefault(),
+        (event) => event.preventDefault(),
         { passive: false }
       );
     }
@@ -1986,6 +1974,7 @@
         img.className = "photo-modal-image";
         img.src = image.currentSrc || image.src;
         img.alt = image.alt || "放大查看照片";
+        bindPhotoZoomInteractions(img, closePhotoModal);
         stage.appendChild(img);
       });
 
@@ -2000,8 +1989,8 @@
         }
       });
 
-      modalPortal.addEventListener("click", (clickEvent) => {
-        if (clickEvent.target === modalPortal || clickEvent.target === stage) {
+      modalPortal.addEventListener("click", (event) => {
+        if (event.target === modalPortal || event.target === stage) {
           closePhotoModal();
         }
       });
@@ -2012,21 +2001,6 @@
 
       const portalToRemove = modalPortal;
       modalPortal = null;
-      modalImage = null;
-      photoModalScale = 1;
-      pinchStartDistance = 0;
-      pinchStartScale = 1;
-      suppressModalClickClose = false;
-      dragOffsetX = 0;
-      dragOffsetY = 0;
-      dragStartX = 0;
-      dragStartY = 0;
-      dragTouchStartX = 0;
-      dragTouchStartY = 0;
-      dragTouchActive = false;
-      dragInProgress = false;
-      lastModalTapAt = 0;
-      ignoreModalTapUntil = 0;
 
       portalToRemove.remove();
       if (modalHost && !modalHost.querySelector(".photo-modal-portal")) {

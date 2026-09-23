@@ -1291,6 +1291,7 @@
 
     .photo-modal-image {
       display: block;
+      position: relative;
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -1300,7 +1301,7 @@
       user-select: none;
       -webkit-user-select: none;
       touch-action: none;
-      transition: transform .14s ease-out;
+      transition: transform .14s ease-out, opacity .16s ease-out;
       transform-origin: center center;
     }
 
@@ -1718,7 +1719,7 @@
     }
 
     // Per-image pinch-zoom, double-tap-to-reset, and tap-to-close controller (mobile-first).
-    function bindPhotoZoomInteractions(imageEl, requestClose) {
+    function bindPhotoZoomInteractions(imageEl, requestClose, siblings = []) {
       let scale = 1;
       let pinchStartDistance = 0;
       let pinchStartScale = 1;
@@ -1733,6 +1734,7 @@
       let dragInProgress = false;
       let lastTapAt = 0;
       let ignoreTapUntil = 0;
+      let isZoomedAboveSiblings = false;
 
       const clampScale = (value) => Math.min(Math.max(value, 1), 2.4);
 
@@ -1743,11 +1745,25 @@
         dragOffsetY = Math.min(maxY, Math.max(-maxY, dragOffsetY));
       };
 
+      const setSiblingsBehind = (behind) => {
+        if (behind === isZoomedAboveSiblings || !siblings.length) {
+          isZoomedAboveSiblings = behind;
+          return;
+        }
+        isZoomedAboveSiblings = behind;
+        imageEl.style.zIndex = behind ? "2" : "";
+        siblings.forEach((sibling) => {
+          sibling.style.opacity = behind ? "0" : "";
+          sibling.style.visibility = behind ? "hidden" : "";
+        });
+      };
+
       const applyTransform = () => {
         scale = clampScale(scale);
         clampDrag();
         imageEl.style.touchAction = scale > 1.04 ? "none" : "pan-y";
         imageEl.style.transform = `translate3d(${dragOffsetX}px, ${dragOffsetY}px, 0) scale(${scale})`;
+        setSiblingsBehind(scale > 1.04);
       };
 
       const resetToOriginal = () => {
@@ -1974,8 +1990,13 @@
         img.className = "photo-modal-image";
         img.src = image.currentSrc || image.src;
         img.alt = image.alt || "放大查看照片";
-        bindPhotoZoomInteractions(img, closePhotoModal);
         stage.appendChild(img);
+      });
+
+      const stageImages = Array.from(stage.children);
+      stageImages.forEach((img) => {
+        const siblings = stageImages.filter((other) => other !== img);
+        bindPhotoZoomInteractions(img, closePhotoModal, siblings);
       });
 
       modalPortal.appendChild(stage);

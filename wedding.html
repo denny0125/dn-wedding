@@ -1307,6 +1307,18 @@
     .photo-modal-portal.is-open .photo-modal-image {
       transform: none;
     }
+
+    .photo-modal-stage-list {
+      flex-direction: column;
+      gap: 1rem;
+      overflow-y: auto;
+      max-height: 100%;
+    }
+
+    .photo-modal-stage-list .photo-modal-image {
+      max-height: 46vh;
+      touch-action: auto;
+    }
   </style>
  </head>
  <body data-template-id="__page-root" class="w-full min-h-screen">
@@ -1478,7 +1490,6 @@
      <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
       <a data-template-id="venue-map-button" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E6%99%B6%E5%AE%B4%E6%9C%83%E9%A4%A8%20%E6%B0%91%E6%AC%8A%E9%A4%A8%20%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E6%B0%91%E6%AC%8A%E6%9D%B1%E8%B7%AF%E4%B8%89%E6%AE%B52%E8%99%9F" target="_blank" rel="noopener noreferrer" class="canva-link inline-flex items-center gap-2 rounded-sm border border-white/60 px-5 py-3 font-semibold transition hover:bg-white hover:text-[#66715a]" style="color: rgb(255, 255, 255); font-weight: 600;"> <i data-lucide="map" class="h-4 w-4"></i> <span data-template-id="venue-map-label" class="canva-text" style="color: rgb(255, 255, 255); font-weight: 600; font-style: normal; font-size: 16px;">開啟 Google Map 導航</span> </a>
       <button id="traffic-info-button" type="button" class="canva-link inline-flex items-center gap-2 rounded-sm border border-white/60 px-5 py-3 font-semibold transition hover:bg-white hover:text-[#66715a]" style="color: rgb(255, 255, 255); font-weight: 600;"> <i data-lucide="map" class="h-4 w-4"></i> <span class="canva-text" style="color: rgb(255, 255, 255); font-weight: 600; font-style: normal; font-size: 16px;">交通資訊</span> </button>
-      <button id="driving-route-button" type="button" class="canva-link inline-flex items-center gap-2 rounded-sm border border-white/60 px-5 py-3 font-semibold transition hover:bg-white hover:text-[#66715a]" style="color: rgb(255, 255, 255); font-weight: 600;"> <i data-lucide="map" class="h-4 w-4"></i> <span class="canva-text" style="color: rgb(255, 255, 255); font-weight: 600; font-style: normal; font-size: 16px;">開車路線</span> </button>
       <button id="parking-guide-button" type="button" class="canva-link inline-flex items-center gap-2 rounded-sm border border-white/60 px-5 py-3 font-semibold transition hover:bg-white hover:text-[#66715a]" style="color: rgb(255, 255, 255); font-weight: 600;"> <i data-lucide="map" class="h-4 w-4"></i> <span class="canva-text" style="color: rgb(255, 255, 255); font-weight: 600; font-style: normal; font-size: 16px;">停車場指引</span> </button>
      </div>
      <img id="traffic-map-image" src="pics/民權館交通資訊.jpg" alt="晶宴會館民權館交通資訊圖" class="hidden" />
@@ -1949,6 +1960,53 @@
       createPhotoModal(image);
     }
 
+    function openTrafficGuideModal(images, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      if (!images.length || modalPortal) return;
+
+      modalScrollY = window.scrollY;
+      modalHost = findPhotoModalHost(images[0]);
+      if (!modalHost) return;
+
+      modalHost.classList.add("photo-modal-host");
+      modalPortal = document.createElement("div");
+      modalPortal.className = "photo-modal-portal";
+      modalPortal.setAttribute("role", "dialog");
+      modalPortal.setAttribute("aria-modal", "true");
+      modalPortal.setAttribute("aria-label", "交通與停車資訊");
+
+      const stage = document.createElement("div");
+      stage.className = "photo-modal-stage photo-modal-stage-list";
+
+      images.forEach((image) => {
+        const img = document.createElement("img");
+        img.className = "photo-modal-image";
+        img.src = image.currentSrc || image.src;
+        img.alt = image.alt || "放大查看照片";
+        stage.appendChild(img);
+      });
+
+      modalPortal.appendChild(stage);
+      document.body.appendChild(modalPortal);
+      syncPhotoModalViewport();
+
+      requestAnimationFrame(() => {
+        if (modalPortal && modalPortal.isConnected) {
+          syncPhotoModalViewport();
+          modalPortal.classList.add("is-open");
+        }
+      });
+
+      modalPortal.addEventListener("click", (clickEvent) => {
+        if (clickEvent.target === modalPortal || clickEvent.target === stage) {
+          closePhotoModal();
+        }
+      });
+    }
+
     function closePhotoModal() {
       if (!modalPortal) return;
 
@@ -1994,14 +2052,7 @@
       });
     }
 
-    const venueInfoButtons = [
-      ["traffic-info-button", "traffic-map-image"],
-      ["driving-route-button", "driving-route-image"],
-      ["parking-guide-button", "parking-guide-image"],
-    ];
-    venueInfoButtons.forEach(([buttonId, imageId]) => {
-      const button = document.getElementById(buttonId);
-      const image = document.getElementById(imageId);
+    const bindVenueInfoButton = (button, onActivate) => {
       if (!button) return;
 
       const clearTapState = () => {
@@ -2016,11 +2067,19 @@
         event.preventDefault();
         event.stopPropagation();
         clearTapState();
-
-        if (image) {
-          openPhotoModal(image, event);
-        }
+        onActivate(event);
       });
+    };
+
+    const trafficMapImage = document.getElementById("traffic-map-image");
+    bindVenueInfoButton(document.getElementById("traffic-info-button"), (event) => {
+      if (trafficMapImage) openPhotoModal(trafficMapImage, event);
+    });
+
+    const drivingRouteImage = document.getElementById("driving-route-image");
+    const parkingGuideImage = document.getElementById("parking-guide-image");
+    bindVenueInfoButton(document.getElementById("parking-guide-button"), (event) => {
+      openTrafficGuideModal([drivingRouteImage, parkingGuideImage].filter(Boolean), event);
     });
 
     document.addEventListener("keydown", (event) => {

@@ -1719,7 +1719,7 @@
     }
 
     // Per-image pinch-zoom, double-tap-to-reset, and tap-to-close controller (mobile-first).
-    function bindPhotoZoomInteractions(imageEl, requestClose, siblings = []) {
+    function bindPhotoZoomInteractions(imageEl, requestClose, siblings = [], container = null) {
       let scale = 1;
       let pinchStartDistance = 0;
       let pinchStartScale = 1;
@@ -1746,12 +1746,12 @@
       };
 
       const setSiblingsBehind = (behind) => {
-        if (behind === isZoomedAboveSiblings || !siblings.length) {
-          isZoomedAboveSiblings = behind;
-          return;
-        }
+        if (behind === isZoomedAboveSiblings) return;
         isZoomedAboveSiblings = behind;
-        imageEl.style.zIndex = behind ? "2" : "";
+        imageEl.style.zIndex = behind ? "5" : "";
+        if (container) {
+          container.style.overflow = behind ? "visible" : "";
+        }
         siblings.forEach((sibling) => {
           sibling.style.opacity = behind ? "0" : "";
           sibling.style.visibility = behind ? "hidden" : "";
@@ -1996,7 +1996,7 @@
       const stageImages = Array.from(stage.children);
       stageImages.forEach((img) => {
         const siblings = stageImages.filter((other) => other !== img);
-        bindPhotoZoomInteractions(img, closePhotoModal, siblings);
+        bindPhotoZoomInteractions(img, closePhotoModal, siblings, stage);
       });
 
       modalPortal.appendChild(stage);
